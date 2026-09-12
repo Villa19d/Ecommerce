@@ -1,0 +1,46 @@
+
+
+# 🛒 Flujo de Redux en E-Commerce (Django + React)
+## 🔄 Flujo General de Redux
+Componente React → Dispara una acción (ej: login())
+Action → Hace petición a Django API → Despacha resultado al reducer
+Reducer → Actualiza el estado global según la acción
+Componente → Se re-renderiza con los nuevos datos (usa useSelector)
+
+¿Qué hace?
+  🔹dispatch: Función de Redux para enviar acciones al store.
+  🔹type: Tipo de acción (usado en el reducer para saber cómo actualizar el estado).
+  🔹payload: Datos asociados a la acción (en este caso, el mensaje y tipo de alerta).
+
+## 📌 Diagrama de Flujo General
+https://stackedit.io/app#  ó  ctrl+shif+v
+
+```mermaid
+graph TD
+    A[Componente React] -->|dispatch| B[Action]
+    B -->|Axios| C[API Django]
+    C -->|Response| B
+    B -->|dispatch| D[Reducer]
+    D -->|Actualiza| E[Store]
+    E -->|Nuevo Estado| A
+```
+
+
+
+## Diagrama de Flujo de Alertas
+https://stackedit.io/app#  ó  ctrl+shift+v
+```mermaid
+sequenceDiagram
+    participant UI as Componente
+    participant Action
+    participant Reducer
+    participant Store
+    
+    UI->>Action: dispatch(setAlert('Éxito', 'green'))
+    Action->>Reducer: { type: 'SET_ALERT', payload: {msj, type} }
+    Reducer->>Store: Actualiza estado.alert
+    Store->>UI: Re-render con alerta visible
+    Action->>Action: setTimeout(REMOVE_ALERT, 5000)
+```
+
+

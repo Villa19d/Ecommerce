@@ -1,0 +1,20 @@
+# Entornos virtuales
+venv/
+env/
+__pycache__/
+*.pyc
+
+# Variables de entorno
+backend/.env
+
+# Node modules
+frontend/node_modules/
+
+# Archivos de media o subidas
+media/
+
+# Build
+frontend/build/
+
+# Varios
+.DS_Store

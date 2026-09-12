@@ -1,0 +1,124 @@
+import Layout from '../../hocs/layout.js';
+
+import {Link, useParams} from 'react-router-dom'
+import { useState,  useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Navigate } from 'react-router-dom';
+import { Oval } from 'react-loader-spinner';
+import { faPassport } from '@fortawesome/free-solid-svg-icons';
+import {reset_password_confirm} from '../../Redux/Actions/auth.js'
+import Loader from 'react-loader-spinner'
+
+const ResetPasswordConfirm =({reset_password_confirm
+    ,loading})=>{
+  const [formData,setFormData]=useState({
+    new_password:'',
+    re_new_password:''
+  });
+
+  const params = useParams();
+
+  const {
+    new_password,
+    re_new_password
+  }=formData;
+
+  useEffect(()=>{window.scrollTo(0,0)},[])
+
+  const [requestSent, setRequestSent] = useState(false);
+
+  const onChange = e => setFormData({...formData, [e.target.name]:e.target.value});
+  
+  const onSubmit = e =>{
+    e.preventDefault();
+    const uid = params.uid;
+    const token = params.token;
+
+    reset_password_confirm(uid, token, new_password, re_new_password)
+
+    if(new_password === re_new_password){
+      setRequestSent(true);
+    }
+  }
+
+  if(requestSent && !loading) return <Navigate to="/"/>;
+
+    return(
+        <Layout>
+      <div className="min-h-full flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+        <div className="sm:mx-auto sm:w-full sm:max-w-md">
+          <img
+            className="mx-auto h-12 w-auto"
+            src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
+            alt="Workflow"
+          />
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Set you new password :)</h2>
+          
+        </div>
+
+        <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+            <form onSubmit={e=>onSubmit(e)} className="space-y-6">
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Password
+                </label>
+                <div className="mt-1">
+                  <input
+                    name="new_password"
+                    value={new_password}
+                    onChange={e=>onChange(e)}
+                    type="password"
+                    placeholder="New Password"
+                    required
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                  Confirm Password
+                </label>
+                <div className="mt-1">
+                  <input
+                    name="re_new_password"
+                    value={re_new_password}
+                    onChange={e=>onChange(e)}
+                    type="password"
+                    placeholder="Repeat New Password"
+                    required
+                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                  />
+                </div>
+              </div>
+
+              <div>
+                {loading ? 
+                <button
+                className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                <Oval color="#00BFFF" height={80} width={80} />  
+              </button>:
+              <button
+              type="submit"
+              className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+            >
+              Send Email
+            </button>}
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </Layout>
+    )
+}
+
+const mapStateToProps= state=>({
+    loading:state.Auth.loading
+})
+
+export default connect(mapStateToProps,{
+  reset_password_confirm
+})(ResetPasswordConfirm)

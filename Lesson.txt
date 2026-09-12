@@ -1,0 +1,217 @@
+Commands in Terminal
+  For Virtual Enviroment 
+    *pip install virtualenv
+    python -m venv nombre_del_entorno
+  
+    *virtualenv venv
+    *venv\Scripts\activate
+    *deactivate
+
+
+For react (y otras tecnologías) y tailwindcss
+  npx create-react-app ninerogues --template cra-template-pwa
+  npm install redux@4.2.1 redux-devtools-extension@2.13.9 react-redux@9.1.2 redux-thunk@2.4.1 --legacy-peer-deps
+      (Elcomando de arriba viene con mas configuraciones, ponselo a chatgpt lo que salga en terminal)
+  npm install react-toastify
+  npm install react-router-dom
+ npm i @headlessui/react 
+ npm i @heroicons/react
+ npm install react-avatar --save
+ npm install prop-types --save --legacy-peer-deps
+ npm install braintree-web-drop-in-react --legacy-peer-deps
+
+
+  npm install -D tailwindcss
+  npx tailwindcss init
+  npm install @craco/craco
+  npx tailwindcss-cli@latest init
+
+  npm i axios --legacy-peer-deps
+
+  npm i --save @fortawesome/fontawesome-svg-core
+  npm i --save @fortawesome/react-fontawesome@latest
+
+
+PARA DJANGO 
+  pip install mysqlclient
+  pip install -r requirements.txt
+  *pip install django
+  *pip install -r requirements.txt   --> This document contains all the requirements that will be used in the project
+  *django-admin startproject backend
+  *python manage.py startapp user
+
+Para crear carpeta static 
+  *npm run build 
+  *python manage.py collectstatic
+
+Para hacer las migraciones 
+  *python manage.py makemigrations
+  *python manage.py migrate 
+  *python manage.py createsuperuser   --> Un superusuario es un tipo de usuario que tiene permisos administrativos completos en el sitio web. 
+      email:rodrigovillar18d@gmail.com
+      password:viejoLoco134
+
+
+
+  
+
+  _      ____   _____ _____ _____            _____  ______ _        _____  _____   ______     ________ _____ _______ ____   
+ | |    / __ \ / ____|_   _/ ____|   /\     |  __ \|  ____| |      |  __ \|  __ \ / __ \ \   / /  ____/ ____|__   __/ __ \  
+ | |   | |  | | |  __  | || |       /  \    | |  | | |__  | |      | |__) | |__) | |  | \ \_/ /| |__ | |       | | | |  | | 
+ | |   | |  | | | |_ | | || |      / /\ \   | |  | |  __| | |      |  ___/|  _  /| |  | |\   / |  __|| |       | | | |  | | 
+ | |___| |__| | |__| |_| || |____ / ____ \  | |__| | |____| |____  | |    | | \ \| |__| | | |  | |___| |____   | | | |__| | 
+ |______\____/ \_____|_____\_____/_/    \_\ |_____/|______|______| |_|    |_|  \_\\____/  |_|  |______\_____|  |_|  \____/  
+                                                                                                                         
+                                                                                                                         
+
+ECommerceV2.0.0/
+├── backend/       # Django (API y lógica del servidor)
+└── frontend/      # React (Interfaz de usuario)
+
+
+🖥️ Backend (Django)
+C:\Users\rodri\OneDrive\Documentos\Python\ECommerceV2.0.0\backend>
+│   .env
+│   manage.py       ---> Punto de entrada para comandos Django (migraciones, runserver, etc.)
+│
+├───backend
+│   │   asgi.py
+│   │   settings.py  --> Configuración global (BD, apps instaladas, middleware, etc.)
+│   │   urls.py      ---> Rutas principales del proyecto (incluye URLs de otras apps)
+│   │   wsgi.py     ---> wsgi.py/asgi.py: Configuración para despliegue
+│   │   __init__.py
+├───category
+│   │   admin.py
+│   │   apps.py
+│   │   models.py
+│   │   tests.py
+│   │   urls.py
+│   │   views.py
+│   │   __init__.py
+│   │
+│   ├───migrations ...
+│
+├───media  ----> Almacena imágenes subidas (fotos de productos)
+├───product
+│   │   admin.py
+│   │   apps.py
+│   │   models.py  -->Modelos de Producto
+│   │   serializers.py  --->Convierte datos de usuario para la API
+│   │   tests.py  
+│   │   urls.py    ---->Rutas para endpoints de usuario (/auth/...)
+│   │   views.py    --->Lógica para autenticación/registro
+│   │   __init__.py
+│   │
+│   ├───migrations ...
+│
+└───user
+    │   admin.py
+    │   apps.py
+    │   models.py   --->Define el modelo de usuarios (UserAccount)
+    │   serializers.py  ---> Convierte datos de usuario para la API
+    │   tests.py
+    │   views.py    -->Lógica para autenticación/registro
+    │   __init__.py
+    │
+    ├───migrations ...
+
+
+
+
+💻 Frontend (React) 
+C:\Users\rodri\OneDrive\Documentos\Python\ECommerceV2.0.0\frontend\src> 
+│   App.js   ---> Componente raíz que maneja rutas principales
+│   index.css
+│   index.js  ---> Renderiza la aplicación React en el DOM y Configura Redux (gestión de estado global)
+│   service-worker.js
+│   serviceWorkerRegistration.js
+│   store.js
+│
+├───components
+│   │   alert.js
+│   │
+│   ├───home
+│   └───navigation  --> Componentes reutilizables de UI
+│           Footer.js
+│           Navbar.js
+│
+├───containers
+│   ├───auth  --->Páginas de login/registro
+│   │       Activate.js
+│   │       Login.js
+│   │       ResetPassword.js
+│   │       ResetPasswordConfirm.js
+│   │       Signup.js
+│   │
+│   ├───errors
+│   │       Error404.jsx
+│   │
+│   ├───home   ---->Página principal
+│   │       home.jsx
+│   │
+│   └───pages  --->Catálogo de productos
+│           Shop.jsx
+│
+├───helpers
+├───hocs
+│       layout.js
+│
+└───Redux
+    ├───Actions
+    │       Alert.js
+    │       auth.js
+    │       categories.js
+    │       products.js
+    │       types.js
+    │
+    └───Reducers
+            Alert.js
+            auth.js
+            categories.js
+            index.js
+
+
+
+
+🔄 Cómo se comunican ambos lados
+    ⚫Flujo:
+    🔹React hace peticiones HTTP a los endpoints de Django (ej: /api/product/)
+    🔹Django procesa la solicitud (views.py) y devuelve JSON (serializers.py)
+    🔹React recibe los datos y actualiza la interfaz
+
+    ⚫Ejemplo concreto (Productos):
+
+    Frontend (Shop.jsx) → GET /api/product/ → Django (product/views.py) → 
+    Product.objects.all() → product/serializers.py → JSON → React lo muestra
+
+    ⚫Autenticación:
+    🔹React envía credenciales a /auth/login/
+    🔹Django (Djoser) verifica y devuelve JWT token
+    🔹React almacena el token y lo envía en headers para requests autenticados
+
+    TailwindCSS (frontend/tailwind.config.js):  Configuración del sistema de estilos
+
+
+EXPLICACIÓN DE FUNCIONAMIENTO DE REDUX (CTRL+SHIFT+V  ---> Tipo Markdown, que no diga plain text en el visual studio )
+```mermaid
+sequenceDiagram
+    participant Componente
+    participant Redux
+    participant Django
+    Componente->>Redux: dispatch(getProducts())
+    Redux->>Django: GET /api/product/
+    Django-->>Redux: JSON con productos
+    Redux->>Componente: Actualiza estado
+    Componente->>Componente: Re-render con nuevos datos
+``` 
+
+
+
+
+
+
+
+
+
+
+
