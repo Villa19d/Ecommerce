@@ -18,7 +18,7 @@ class Order(models.Model):
         max_length=50, choices=OrderStatus.choices, default=OrderStatus.not_processed)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     transaction_id = models.CharField(max_length=255, unique=True)
-    amount = models.DecimalField(max_digits=5, decimal_places=2)
+    amount = models.DecimalField(max_digits=9, decimal_places=2)
     full_name = models.CharField(max_length=255)
     address_line_1 = models.CharField(max_length=255)
     address_line_2 = models.CharField(max_length=255, blank=True)
@@ -41,7 +41,7 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
-    price = models.DecimalField(max_digits=5, decimal_places=2)
+    price = models.DecimalField(max_digits=9, decimal_places=2)
     count = models.IntegerField()
     date_added = models.DateTimeField(default=datetime.now)
 

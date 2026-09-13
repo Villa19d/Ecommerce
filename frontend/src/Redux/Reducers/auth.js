@@ -32,7 +32,7 @@ const initialState = {
 
 export default function Auth(state = initialState, action){
    const {type,payload} = action;
-   console.log('En funciones de cases...type es:'+type+' y payload es: '+payload)
+
 
    switch(type){
     case SET_AUTH_LOADING:

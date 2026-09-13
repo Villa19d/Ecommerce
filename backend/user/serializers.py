@@ -10,7 +10,8 @@ class UserCreateSerializer(UserCreateSerializer):
             'id',
             'first_name',
             'last_name',
-            'email', 
+            'email',
+            'password',
             'getCompleteName',
             'getShortName'
         )

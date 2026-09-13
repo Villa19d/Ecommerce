@@ -6,11 +6,12 @@ import {
     get_total,
     get_item_total
 } from "../../Redux/Actions/cart";
+import { get_user_profile } from '../../Redux/Actions/profile';
 import { useEffect } from 'react';
 import { Navigate } from 'react-router';
 import DashboardLink from '../../components/dashboard/DashboardLink';
 import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, Menu, Transition } from '@headlessui/react'
 import {
   BellIcon,
   CalendarIcon,
@@ -71,12 +72,15 @@ const DashboardPayments =({
     get_item_total,
     orders,
     isAuthenticated,
-    user
+    user,
+    profile,
+    get_user_profile
 })=>{
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     useEffect(() => {
+        get_user_profile()
         get_items()
         get_total()
         get_item_total()
@@ -100,7 +104,7 @@ const DashboardPayments =({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+              <DialogBackdrop className="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" />
             </Transition.Child>
             <Transition.Child
               as={Fragment}
@@ -227,7 +231,7 @@ const DashboardPayments =({
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={profile && profile.photo ? `${process.env.REACT_APP_API_URL}${profile.photo}` : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                         alt=""
                       />
                     </Menu.Button>
@@ -279,7 +283,7 @@ const DashboardPayments =({
           <div className="space-y-12">
             {orders.map((product) => (
 
-              <>
+              <Fragment key={product.transaction_id}>
                <h2 className="sr-only">Products purchased</h2>
             <h1 className="text-3xl font-extrabold tracking-tight text-gray-900">Order Details</h1>
             
@@ -359,7 +363,7 @@ const DashboardPayments =({
                   </div>
                 </div>
               </div>
-              </>
+              </Fragment>
             ))}
           </div>
         </div>
@@ -379,12 +383,14 @@ const DashboardPayments =({
 const mapStateToProps =state=>({
     orders: state.Orders.orders,
     isAuthenticated: state.Auth.isAuthenticated,
-    user: state.Auth.user
+    user: state.Auth.user,
+    profile: state.Profile.profile
 })
 
 export default connect(mapStateToProps,{
     list_orders,
     get_items,
     get_total,
-    get_item_total
+    get_item_total,
+    get_user_profile
 }) (DashboardPayments)

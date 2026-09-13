@@ -1,5 +1,5 @@
 from datetime import datetime
-from apps.product.models import Product
+from product.models import Product
 from django.db import models
 
 from django.conf import settings

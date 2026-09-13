@@ -6,11 +6,12 @@ import {
     get_total,
     get_item_total
 } from "../../Redux/Actions/cart";
+import { get_user_profile } from '../../Redux/Actions/profile';
 import { useEffect } from 'react';
 import { Navigate } from 'react-router';
 import DashboardLink from '../../components/dashboard/DashboardLink';
 import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, Menu, Transition } from '@headlessui/react'
 import {
   BellIcon,
   CalendarIcon,
@@ -50,12 +51,15 @@ const Dashboard =({
     get_item_total,
     orders,
     isAuthenticated,
-    user
+    user,
+    profile,
+    get_user_profile
 })=>{
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     useEffect(() => {
+        get_user_profile()
         get_items()
         get_total()
         get_item_total()
@@ -79,7 +83,7 @@ const Dashboard =({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+              <DialogBackdrop className="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" />
             </Transition.Child>
             <Transition.Child
               as={Fragment}
@@ -206,7 +210,7 @@ const Dashboard =({
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={profile && profile.photo ? `${process.env.REACT_APP_API_URL}${profile.photo}` : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                         alt=""
                       />
                     </Menu.Button>
@@ -249,28 +253,49 @@ const Dashboard =({
             {/* We've used 3xl here, but feel free to try other max-widths based on your needs */}
             <div className="max-w-3xl mx-auto">
             <div>
-        <h3 className="text-lg leading-6 font-medium text-gray-900">Applicant Information</h3>
-        <p className="mt-1 max-w-2xl text-sm text-gray-500">Personal details and application.</p>
+        <h3 className="text-lg leading-6 font-medium text-gray-900">User Summary</h3>
+        <p className="mt-1 max-w-2xl text-sm text-gray-500">A quick overview of your account details.</p>
       </div>
       <div className="mt-5 border-t border-gray-200">
         <dl className="divide-y divide-gray-200">
           <div className="py-4 sm:py-5 sm:grid sm:grid-cols-3 sm:gap-4">
             <dt className="text-sm font-medium text-gray-500">Full name</dt>
             <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <span className="flex-grow">{user.first_name} {user.last_name}</span>
+              <span className="flex-grow">
+                {profile && profile.first_name ? profile.first_name : (user && user.first_name ? user.first_name : '')} 
+                {' '}
+                {profile && profile.last_name ? profile.last_name : (user && user.last_name ? user.last_name : '')}
+              </span>
               
             </dd>
           </div>
 
-          
           <div className="py-4 sm:grid sm:py-5 sm:grid-cols-3 sm:gap-4">
             <dt className="text-sm font-medium text-gray-500">Email address</dt>
             <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
-              <span className="flex-grow">{user.email}</span>
-              
+              <span className="flex-grow">{profile && profile.email ? profile.email : (user && user.email ? user.email : '')}</span>
             </dd>
           </div>
 
+          <div className="py-4 sm:grid sm:py-5 sm:grid-cols-3 sm:gap-4">
+            <dt className="text-sm font-medium text-gray-500">Total Orders</dt>
+            <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <span className="flex-grow">{orders ? orders.length : 0} Orders placed</span>
+              <Link to="/dashboard/payments" className="text-indigo-600 hover:text-indigo-500">
+                 View History
+              </Link>
+            </dd>
+          </div>
+          
+          <div className="py-4 sm:grid sm:py-5 sm:grid-cols-3 sm:gap-4">
+            <dt className="text-sm font-medium text-gray-500">Profile Actions</dt>
+            <dd className="mt-1 flex text-sm text-gray-900 sm:mt-0 sm:col-span-2">
+              <span className="flex-grow">Keep your information up to date.</span>
+              <Link to="/dashboard/profile" className="text-indigo-600 hover:text-indigo-500">
+                 Update Profile
+              </Link>
+            </dd>
+          </div>
          
         </dl>
       </div>
@@ -287,12 +312,14 @@ const Dashboard =({
 const mapStateToProps =state=>({
     orders: state.Orders.orders,
     isAuthenticated: state.Auth.isAuthenticated,
-    user: state.Auth.user
+    user: state.Auth.user,
+    profile: state.Profile.profile
 })
 
 export default connect(mapStateToProps,{
     list_orders,
     get_items,
     get_total,
-    get_item_total
+    get_item_total,
+    get_user_profile
 }) (Dashboard)

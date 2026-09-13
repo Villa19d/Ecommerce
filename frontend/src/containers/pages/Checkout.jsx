@@ -85,6 +85,13 @@ const Checkout = ({
 
     const buy = async e => {
         e.preventDefault();
+        
+        if (shipping_id === 0) {
+            setAlert('Please select a shipping option before placing the order', 'red');
+            window.scrollTo(0, 0);
+            return;
+        }
+
         let nonce = await data.instance.requestPaymentMethod();
         if (coupon && coupon !== null && coupon !== undefined) {
           process_payment(
@@ -221,9 +228,9 @@ const Checkout = ({
             <DropIn
               options={{
                   authorization: clientToken,
-                  paypal: {
-                      flow: 'vault'
-                  }
+                  // paypal: {
+                  //     flow: 'vault'
+                  // }
               }}
               onInstance={instance => (data.instance = instance)}
             />

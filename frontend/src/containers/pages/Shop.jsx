@@ -2,7 +2,7 @@ import Layout from '../../hocs/layout.js';
 
 
 import { Fragment, useEffect, useState } from 'react'
-import { Dialog, Disclosure, Menu, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, Disclosure, Menu, Transition } from '@headlessui/react'
 import { XIcon } from '@heroicons/react/outline'
 import { ChevronDownIcon, FilterIcon, MinusSmIcon, PlusSmIcon, ViewGridIcon } from '@heroicons/react/solid';
 
@@ -170,7 +170,7 @@ const Shop = ({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-25" />
+              <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-25 transition-opacity" />
             </Transition.Child>
 
             <Transition.Child

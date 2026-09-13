@@ -13,6 +13,8 @@ class UserProfile(models.Model):
     phone = models.CharField(max_length=255, default='')
     country_region = models.CharField(
         max_length=255, choices=Countries.choices, default=Countries.Canada)
+    photo = models.ImageField(upload_to='photos/%Y/%m/', blank=True, null=True)
+    birthdate = models.DateField(blank=True, null=True)
 
     def __str__(self):
-        return self.user
+        return self.user.email

@@ -11,9 +11,14 @@ from shipping.models import Shipping
 from django.core.mail import send_mail
 import braintree
 
+if settings.BT_ENVIRONMENT.lower() == 'sandbox':
+    bt_env = braintree.Environment.Sandbox
+else:
+    bt_env = braintree.Environment.Production
+
 gateway = braintree.BraintreeGateway(
     braintree.Configuration(
-        environment=settings.BT_ENVIRONMENT,
+        environment=bt_env,
         merchant_id=settings.BT_MERCHANT_ID,
         public_key=settings.BT_PUBLIC_KEY,
         private_key=settings.BT_PRIVATE_KEY
@@ -247,7 +252,8 @@ class ProcessPaymentView(APIView):
                     }
                 }
             )
-        except:
+        except Exception as e:
+            print("Error creating transaction:", e)
             return Response(
                 {'error': 'Error processing the transaction'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -286,7 +292,8 @@ class ProcessPaymentView(APIView):
                     shipping_time=shipping_time,
                     shipping_price=float(shipping_price)
                 )
-            except:
+            except Exception as e:
+                print("Error creating order:", e)
                 return Response(
                     {'error': 'Transaction succeeded but failed to create the order'},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -304,7 +311,8 @@ class ProcessPaymentView(APIView):
                         price=cart_item.product.price,
                         count=cart_item.count
                     )
-                except:
+                except Exception as e:
+                    print("Error creating order item:", e)
                     return Response(
                         {'error': 'Transaction succeeded and order created, but failed to create an order item'},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -323,7 +331,8 @@ class ProcessPaymentView(APIView):
                     [user.email],
                     fail_silently=False
                 )
-            except:
+            except Exception as e:
+                print("Error sending email:", e)
                 return Response(
                     {'error': 'Transaction succeeded and order created, but failed to send email'},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -335,7 +344,8 @@ class ProcessPaymentView(APIView):
 
                 # Actualizar carrito
                 Cart.objects.filter(user=user).update(total_items=0)
-            except:
+            except Exception as e:
+                print("Error clearing cart:", e)
                 return Response(
                     {'error': 'Transaction succeeded and order successful, but failed to clear cart'},
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -346,7 +356,9 @@ class ProcessPaymentView(APIView):
                 status=status.HTTP_200_OK
             )
         else:
+            error_message = newTransaction.message if hasattr(newTransaction, 'message') else 'Transaction failed'
+            print("BRAINTREE ERROR:", error_message)
             return Response(
-                {'error': 'Transaction failed'},
+                {'error': f'Transaction failed: {error_message}'},
                 status=status.HTTP_400_BAD_REQUEST
             )

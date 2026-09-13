@@ -54,7 +54,7 @@ export default function Example() {
                         </div>
                         <div className="w-44 h-64 rounded-lg overflow-hidden">
                           <img
-                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTC1Yr0JXpo5jPyVa3MV1htPZIQHYKpasZ0BA&s"
+                            src="https://images.unsplash.com/photo-1518770660439-4636190af475?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80"
                             alt=""
                             className="w-full h-full object-center object-cover"
                           />

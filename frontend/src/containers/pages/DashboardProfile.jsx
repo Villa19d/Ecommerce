@@ -9,7 +9,7 @@ import { useEffect } from 'react';
 import { Navigate } from 'react-router';
 import DashboardLink from '../../components/dashboard/DashboardLink';
 import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, Menu, Transition } from '@headlessui/react'
 import { toast } from 'react-toastify'
 import { Oval } from 'react-loader-spinner';
 
@@ -28,8 +28,9 @@ import {
 import { SearchIcon } from '@heroicons/react/solid'
 import { Link } from 'react-router-dom';
 import { countries } from '../../helpers/Countries';
-import { update_user_profile } from '../../Redux/Actions/profile';
+import { update_user_profile, get_user_profile } from '../../Redux/Actions/profile';
 import Loader from 'react-loader-spinner';
+
 const userNavigation = [
   { name: 'Your Profile', href: '#' },
   { name: 'Settings', href: '#' },
@@ -49,6 +50,7 @@ const DashboardProfile =({
     isAuthenticated,
     user,
     update_user_profile,
+    get_user_profile,
     profile
 })=>{
 
@@ -56,6 +58,7 @@ const DashboardProfile =({
     const [loading, setLoading] = useState(false)
 
     useEffect(() => {
+        get_user_profile()
         get_items()
         get_total()
         get_item_total()
@@ -63,38 +66,51 @@ const DashboardProfile =({
     }, [])
 
     const [formData, setFormData] = useState({
+        first_name: '',
+        last_name: '',
         address_line_1: '',
         address_line_2: '',
         city: '',
         state_province_region: '',
         zipcode: '',
         phone: '',
-        country_region: 'Canada'
+        country_region: 'Canada',
+        birthdate: '',
+        photo: null
     });
 
     const {
+        first_name,
+        last_name,
         address_line_1,
         address_line_2,
         city,
         state_province_region,
         zipcode,
         phone,
-        country_region
+        country_region,
+        birthdate,
+        photo
     } = formData;
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
+    const onFileChange = e => setFormData({ ...formData, [e.target.name]: e.target.files[0] });
 
     const onSubmit = e => {
       e.preventDefault();
       setLoading(true)
       update_user_profile(
+          first_name,
+          last_name,
           address_line_1,
           address_line_2,
           city,
           state_province_region,
           zipcode,
           phone,
-          country_region
+          country_region,
+          photo,
+          birthdate
       );
       setLoading(false)
       window.scrollTo(0, 0);
@@ -117,7 +133,7 @@ const DashboardProfile =({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+              <DialogBackdrop className="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" />
             </Transition.Child>
             <Transition.Child
               as={Fragment}
@@ -244,7 +260,7 @@ const DashboardProfile =({
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={profile && profile.photo ? `${process.env.REACT_APP_API_URL}${profile.photo}` : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                         alt=""
                       />
                     </Menu.Button>
@@ -292,6 +308,83 @@ const DashboardProfile =({
                 <h3 className="text-lg leading-6 font-medium text-gray-900">Profile</h3>
               </div>
 
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-center sm:border-t sm:border-gray-200 sm:pt-5">
+                <label htmlFor="photo" className="block text-sm font-medium text-gray-700">
+                  Profile Photo
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2 flex items-center">
+                  <span className="h-12 w-12 rounded-full overflow-hidden bg-gray-100">
+                    {profile && profile.photo ? (
+                      <img src={`${process.env.REACT_APP_API_URL}${profile.photo}`} alt="Profile" className="h-full w-full object-cover" />
+                    ) : (
+                      <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                      </svg>
+                    )}
+                  </span>
+                  <input
+                    type="file"
+                    name="photo"
+                    accept="image/*"
+                    onChange={e => onFileChange(e)}
+                    className="ml-5 bg-white py-2 px-3 border border-gray-300 rounded-md shadow-sm text-sm leading-4 font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                  />
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label htmlFor="first_name" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                  First Name:
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <div className="max-w-lg flex rounded-md shadow-sm">
+                    <input
+                      type="text"
+                      name='first_name'
+                      placeholder={`${profile?.first_name || ''}`}
+                      onChange={e => onChange(e)}
+                      value={first_name}
+                      className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label htmlFor="last_name" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                  Last Name:
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <div className="max-w-lg flex rounded-md shadow-sm">
+                    <input
+                      type="text"
+                      name='last_name'
+                      placeholder={`${profile?.last_name || ''}`}
+                      onChange={e => onChange(e)}
+                      value={last_name}
+                      className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                  Email (Read-only):
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <div className="max-w-lg flex rounded-md shadow-sm">
+                    <input
+                      type="email"
+                      name='email'
+                      disabled
+                      value={profile?.email || ''}
+                      className="flex-1 block w-full bg-gray-100 focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500 cursor-not-allowed text-gray-500"
+                    />
+                  </div>
+                </div>
+              </div>
+
               <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
                 <label htmlFor="username" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
                 Address Line 1: 
@@ -302,7 +395,7 @@ const DashboardProfile =({
                     <input
                       type="text"
                       name='address_line_1'
-                      placeholder={`${profile.address_line_1}`}
+                      placeholder={`${profile?.address_line_1 || ''}`}
                       onChange={e => onChange(e)}
                       value={address_line_1}
                       className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
@@ -321,7 +414,7 @@ const DashboardProfile =({
                     <input
                       type="text"
                       name='address_line_2'
-                      placeholder={`${profile.address_line_2}`}
+                      placeholder={`${profile?.address_line_2 || ''}`}
                       onChange={e => onChange(e)}
                       value={address_line_2}
                       className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
@@ -340,7 +433,7 @@ const DashboardProfile =({
                     <input
                       type="text"
                       name='city'
-                      placeholder={`${profile.city}`}
+                      placeholder={`${profile?.city || ''}`}
                       onChange={e => onChange(e)}
                       value={city}
                       className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
@@ -359,7 +452,7 @@ const DashboardProfile =({
                     <input
                       type="text"
                       name='state_province_region'
-                            placeholder={`${profile.state_province_region}`}
+                            placeholder={`${profile?.state_province_region || ''}`}
                             onChange={e => onChange(e)}
                             value={state_province_region}
                       className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
@@ -378,7 +471,7 @@ const DashboardProfile =({
                     <input
                       type="text"
                       name='zipcode'
-                            placeholder={`${profile.zipcode}`}
+                            placeholder={`${profile?.zipcode || ''}`}
                             onChange={e => onChange(e)}
                             value={zipcode}
                       className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
@@ -397,7 +490,7 @@ const DashboardProfile =({
                     <input
                       type="text"
                       name='phone'
-                            placeholder={`${profile.phone}`}
+                            placeholder={`${profile?.phone || ''}`}
                             onChange={e => onChange(e)}
                             value={phone}
                       className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
@@ -416,13 +509,30 @@ const DashboardProfile =({
                             name='country_region'
                             onChange={e => onChange(e)}
                         >
-                            <option value={country_region}>{profile.country_region}</option>
+                            <option value={country_region}>{profile?.country_region || 'Canada'}</option>
                             {
                                 countries && countries.map((country, index) => (
                                     <option key={index} value={country.name}>{country.name}</option>
                                 ))
                             }
                         </select>
+                </div>
+              </div>
+              
+              <div className="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5">
+                <label htmlFor="birthdate" className="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2">
+                  Birthdate
+                </label>
+                <div className="mt-1 sm:mt-0 sm:col-span-2">
+                  <div className="max-w-lg flex rounded-md shadow-sm">
+                    <input
+                      type="date"
+                      name='birthdate'
+                      onChange={e => onChange(e)}
+                      value={birthdate || profile?.birthdate || ''}
+                      className="flex-1 block w-full focus:ring-indigo-500 focus:border-indigo-500 min-w-0 rounded-md sm:text-sm border-gray-500"
+                    />
+                  </div>
                 </div>
               </div>
 
@@ -440,6 +550,49 @@ const DashboardProfile =({
               </button>}
 
             </form>
+            
+            {/* Order History */}
+            <div className="max-w-3xl mx-auto mt-12">
+              <div className="bg-white px-4 py-5 border-b border-gray-200 sm:px-6">
+                <h3 className="text-lg leading-6 font-medium text-gray-900">Order History</h3>
+              </div>
+              <div className="bg-white shadow overflow-hidden sm:rounded-md mt-4">
+                <ul className="divide-y divide-gray-200">
+                  {orders && orders.length > 0 ? orders.map((order, index) => (
+                    <li key={index}>
+                      <div className="px-4 py-4 sm:px-6">
+                        <div className="flex items-center justify-between">
+                          <p className="text-sm font-medium text-indigo-600 truncate">
+                            Order #{order.transaction_id}
+                          </p>
+                          <div className="ml-2 flex-shrink-0 flex">
+                            <p className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              {order.status}
+                            </p>
+                          </div>
+                        </div>
+                        <div className="mt-2 sm:flex sm:justify-between">
+                          <div className="sm:flex">
+                            <p className="flex items-center text-sm text-gray-500">
+                              ${order.amount} - {order.address_line_1}
+                            </p>
+                          </div>
+                          <div className="mt-2 flex items-center text-sm text-gray-500 sm:mt-0">
+                            <CalendarIcon className="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" aria-hidden="true" />
+                            <p>
+                              {new Date(order.date_issued).toLocaleDateString()}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  )) : (
+                    <li className="px-4 py-4 sm:px-6 text-sm text-gray-500">No orders found.</li>
+                  )}
+                </ul>
+              </div>
+            </div>
+
             </div>
             </div>
           </main>
@@ -461,5 +614,6 @@ export default connect(mapStateToProps,{
     get_items,
     get_total,
     get_item_total,
-    update_user_profile
+    update_user_profile,
+    get_user_profile
 }) (DashboardProfile)

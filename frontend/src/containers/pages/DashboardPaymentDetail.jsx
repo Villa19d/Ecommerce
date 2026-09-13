@@ -8,11 +8,12 @@ import {
     get_item_total
 } from "../../Redux/Actions/cart";
 import { get_order_detail } from '../../Redux/Actions/orders';
+import { get_user_profile } from '../../Redux/Actions/profile';
 import { useEffect } from 'react';
 import { Navigate } from 'react-router';
 import DashboardLink from '../../components/dashboard/DashboardLink';
 import { Fragment, useState } from 'react'
-import { Dialog, Menu, Transition } from '@headlessui/react'
+import { Dialog, DialogBackdrop, Menu, Transition } from '@headlessui/react'
 import {
   BellIcon,
   CalendarIcon,
@@ -67,7 +68,9 @@ const DashboardPaymentDetail =({
     order,
     isAuthenticated,
     user,
-    get_order_detail
+    profile,
+    get_order_detail,
+    get_user_profile
 })=>{
 
     const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -77,6 +80,7 @@ const DashboardPaymentDetail =({
     
     useEffect(() => {
         get_order_detail(transaction_id)
+        get_user_profile()
     }, [transaction_id])
 
     if(!isAuthenticated)
@@ -96,7 +100,7 @@ const DashboardPaymentDetail =({
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Dialog.Overlay className="fixed inset-0 bg-gray-600 bg-opacity-75" />
+              <DialogBackdrop className="fixed inset-0 bg-gray-600 bg-opacity-75 transition-opacity" />
             </Transition.Child>
             <Transition.Child
               as={Fragment}
@@ -223,7 +227,7 @@ const DashboardPaymentDetail =({
                       <span className="sr-only">Open user menu</span>
                       <img
                         className="h-8 w-8 rounded-full"
-                        src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+                        src={profile && profile.photo ? `${process.env.REACT_APP_API_URL}${profile.photo}` : "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"}
                         alt=""
                       />
                     </Menu.Button>
@@ -378,7 +382,8 @@ const DashboardPaymentDetail =({
 const mapStateToProps =state=>({
     order: state.Orders.order,
     isAuthenticated: state.Auth.isAuthenticated,
-    user: state.Auth.user
+    user: state.Auth.user,
+    profile: state.Profile.profile
 })
 
 export default connect(mapStateToProps,{
@@ -386,5 +391,6 @@ export default connect(mapStateToProps,{
     get_items,
     get_total,
     get_item_total,
-    get_order_detail
+    get_order_detail,
+    get_user_profile
 }) (DashboardPaymentDetail)

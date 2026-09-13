@@ -5,6 +5,7 @@ import {Navigate} from 'react-router';
 import Alert from '../alert.js' 
 import { get_categories } from '../../Redux/Actions/categories.js';
 import { get_search_products } from '../../Redux/Actions/products';
+import { get_user_profile } from '../../Redux/Actions/profile';
 import SearchBox from './SearchBox'
 import { ShoppingCartIcon } from '@heroicons/react/solid'
 
@@ -101,7 +102,9 @@ function Navbar({
   get_categories,
   categories,
   get_search_products,
-  total_items
+  total_items,
+  profile,
+  get_user_profile
 }) {
 
   // eslint-disable-next-line
@@ -116,6 +119,7 @@ function Navbar({
   
   useEffect(() => {
     get_categories()
+    get_user_profile()
   }, [])
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -144,11 +148,19 @@ function Navbar({
     <Menu as="div" className="relative inline-block text-left">
       <div>
         <Menu.Button className="inline-flex justify-center w-full rounded-full  text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
-          <span className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-100">
-            <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
-              <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-            </svg>
-          </span>
+          {profile && profile.photo ? (
+            <img
+              className="h-10 w-10 rounded-full object-cover"
+              src={`${process.env.REACT_APP_API_URL}${profile.photo}`}
+              alt=""
+            />
+          ) : (
+            <span className="inline-block h-10 w-10 rounded-full overflow-hidden bg-gray-100">
+              <svg className="h-full w-full text-gray-300" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+              </svg>
+            </span>
+          )}
         </Menu.Button>
       </div>
 
@@ -389,11 +401,13 @@ const mapStateToProps = state => ({
   isAuthenticated: state.Auth.isAuthenticated,
   user: state.Auth.user,
   categories: state.Categories.categories,
-  total_items: state.Cart.total_items
+  total_items: state.Cart.total_items,
+  profile: state.Profile.profile
 })
 
 export default connect(mapStateToProps,{
   logout,
   get_categories,
-  get_search_products
+  get_search_products,
+  get_user_profile
 }) (Navbar)

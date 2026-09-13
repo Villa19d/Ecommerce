@@ -16,7 +16,8 @@ import os
 import environ 
 
 env = environ.Env() #-->Inicializa la configuración del entorno
-environ.Env.read_env()
+env_file = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), '.env')
+environ.Env.read_env(env_file)
 
 
 
@@ -60,8 +61,8 @@ DJANGO_APPS = [
     'django.contrib.staticfiles',
 ]
 
-PROJECT_APPS=['user']
-ECOMMERCE_APPS=['category','product','cart', 'shipping']
+PROJECT_APPS=['user', 'user_profile']
+ECOMMERCE_APPS=['category','product','cart', 'shipping', 'payment', 'orders', 'reviews', 'wishlist', 'coupons']
 THIRD_PARTY_APPS=[
     'corsheaders',
     'rest_framework',
@@ -246,10 +247,10 @@ AUTHENTICATION_BACKENDS = (
 #Autenticación JWT
 SIMPLE_JWT = {
     'AUTH_HEADER_TYPES': ('JWT',),
-    'ACCES_TOKEN_LIFETIME': timedelta(minutes=10090),
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10090),
     'REFRESH_TOKEN_LIFETIME' : timedelta(days=30),
-    'ROTATE_REFRESH_TOKENS': True,
-    'BLACKLIST_AFTER_ROTATION':True,
+    'ROTATE_REFRESH_TOKENS': False,
+    'BLACKLIST_AFTER_ROTATION': False,
     'AUTH_TOKEN_CLASSES':(
         'rest_framework_simplejwt.tokens.AccessToken',
     )

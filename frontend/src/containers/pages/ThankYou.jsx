@@ -1,5 +1,6 @@
 import Layout from '../../hocs/layout'
 import { connect } from 'react-redux'
+import { Link } from 'react-router-dom';
 import { Navigate } from 'react-router';
 import { reset } from '../../Redux/Actions/payment';
 import { useEffect } from 'react';
@@ -26,6 +27,14 @@ const ThankYou = ({
                 <p className="max-w-xl mt-5 mx-auto text-xl text-gray-500">
                     Hope you enjoyed shopping in nineRogues
                 </p>
+                <div className="mt-8 flex justify-center">
+                    <Link
+                        to="/shop"
+                        className="inline-flex items-center justify-center px-5 py-3 border border-transparent text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                    >
+                        Volver a la Tienda
+                    </Link>
+                </div>
                 </div>
             </div>
             </div>
