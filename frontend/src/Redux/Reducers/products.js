@@ -42,7 +42,6 @@ export default function Products(state = initialState, action) {
                 products: null
             }
         case GET_PRODUCTS_BY_ARRIVAL_SUCCESS:
-            console.log(payload.products) 
             return {
                 ...state,
                 products_arrival: payload.products

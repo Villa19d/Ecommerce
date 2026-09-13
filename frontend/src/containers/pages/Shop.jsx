@@ -17,15 +17,13 @@ const sortOptions = [
   { name: 'Best Rating', href: '#', current: false },
   { name: 'Newest', href: '#', current: false },
   { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-]
+  { name: 'Price: High to Low', href: '#', current: false }]
 const subCategories = [
   { name: 'Totes', href: '#' },
   { name: 'Backpacks', href: '#' },
   { name: 'Travel Bags', href: '#' },
   { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' },
-]
+  { name: 'Laptop Sleeves', href: '#' }]
 const filters = [
   {
     id: 'color',
@@ -36,8 +34,7 @@ const filters = [
       { value: 'blue', label: 'Blue', checked: true },
       { value: 'brown', label: 'Brown', checked: false },
       { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
-    ],
+      { value: 'purple', label: 'Purple', checked: false }],
   },
   {
     id: 'category',
@@ -47,8 +44,7 @@ const filters = [
       { value: 'sale', label: 'Sale', checked: false },
       { value: 'travel', label: 'Travel', checked: true },
       { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
+      { value: 'accessories', label: 'Accessories', checked: false }],
   },
   {
     id: 'size',
@@ -59,10 +55,8 @@ const filters = [
       { value: '12l', label: '12L', checked: false },
       { value: '18l', label: '18L', checked: false },
       { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
-]
+      { value: '40l', label: '40L', checked: true }],
+  }]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -96,7 +90,7 @@ const Shop = ({
         get_categories()
         get_products()
         window.scrollTo(0,0)
-    }, [])
+    }, [get_products, scrollTo, get_categories])
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value})
 

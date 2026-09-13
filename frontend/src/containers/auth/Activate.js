@@ -20,7 +20,7 @@ const Activate =({
         return () => {
             // console.log("ACtivando...");
         };
-    }, []); /* El array vacío [] asegura que esto se ejecute solo una vez*/
+    }, [activate_account]); /* El array vacío [] asegura que esto se ejecute solo una vez*/
 
     console.log(useParams())
     console.log(useParams().uid+'- - - -', useParams().token)

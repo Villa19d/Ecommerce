@@ -12,14 +12,14 @@ class GetItemsView(APIView):
 
         try:
             wishlist = WishList.objects.get(user=user)
-            wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
+            wishlist_items = WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist)
             result = []
 
-            if WishListItem.objects.filter(wishlist=wishlist).exists():
+            if WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist).exists():
                 for wishlist_item in wishlist_items:
                     item = {}
                     item['id'] = wishlist_item.id
-                    product = Product.objects.get(id=wishlist_item.product.id)
+                    product = wishlist_item.product
                     product = ProductSerializer(product)
                     item['product'] = product.data
                     result.append(item)
@@ -89,14 +89,14 @@ class AddItemView(APIView):
                             total_items=total_items
                         )
 
-            wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
+            wishlist_items = WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist)
             result = []
 
             for wishlist_item in wishlist_items:
                 item = {}
 
                 item['id'] = wishlist_item.id
-                product = Product.objects.get(id=wishlist_item.product.id)
+                product = wishlist_item.product
                 product = ProductSerializer(product)
 
                 item['product'] = product.data
@@ -172,16 +172,16 @@ class RemoveItemView(APIView):
                     total_items=total_items
                 )
             
-            wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
+            wishlist_items = WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist)
 
             result = []
 
-            if WishListItem.objects.filter(wishlist=wishlist).exists():
+            if WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist).exists():
                 for wishlist_item in wishlist_items:
                     item = {}
 
                     item['id'] = wishlist_item.id
-                    product = Product.objects.get(id=wishlist_item.product.id)
+                    product = wishlist_item.product
                     product = ProductSerializer(product)
 
                     item['product'] = product.data

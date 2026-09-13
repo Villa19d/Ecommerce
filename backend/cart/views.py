@@ -13,7 +13,7 @@ class GetItemsView(APIView):
         user = self.request.user
         try:
             cart = Cart.objects.get(user=user)
-            cart_items = CartItem.objects.order_by('product').filter(cart=cart)
+            cart_items = CartItem.objects.select_related('product', 'product__category').order_by('product').filter(cart=cart)
 
             result = []
 
@@ -23,7 +23,7 @@ class GetItemsView(APIView):
 
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
-                    product = Product.objects.get(id=cart_item.product.id)
+                    product = cart_item.product
                     product = ProductSerializer(product)
 
                     item['product'] = product.data
@@ -86,7 +86,7 @@ class AddItemView(APIView):
                         item = {}
                         item['id'] = cart_item.id
                         item['count'] = cart_item.count
-                        product = Product.objects.get(id=cart_item.product.id)
+                        product = cart_item.product
                         product = ProductSerializer(product)
 
                         item['product'] = product.data
@@ -110,7 +110,7 @@ class GetTotalView(APIView):
 
         try:
             cart = Cart.objects.get(user=user)
-            cart_items = CartItem.objects.filter(cart=cart)
+            cart_items = CartItem.objects.select_related('product').filter(cart=cart)
 
             total_cost = 0.0
             total_compare_cost = 0.0
@@ -199,7 +199,7 @@ class UpdateItemView(APIView):
 
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
-                    product = Product.objects.get(id=cart_item.product.id)
+                    product = cart_item.product
                     product = ProductSerializer(product)
 
                     item['product'] = product.data
@@ -250,7 +250,7 @@ class RemoveItemView(APIView):
                 total_items = int(cart.total_items) - 1
                 Cart.objects.filter(user=user).update(total_items=total_items)
 
-            cart_items = CartItem.objects.order_by('product').filter(cart=cart)
+            cart_items = CartItem.objects.select_related('product', 'product__category').order_by('product').filter(cart=cart)
 
             result = []
 
@@ -260,7 +260,7 @@ class RemoveItemView(APIView):
 
                     item['id'] = cart_item.id
                     item['count'] = cart_item.count
-                    product = Product.objects.get(id=cart_item.product.id)
+                    product = cart_item.product
                     product = ProductSerializer(product)
 
                     item['product'] = product.data

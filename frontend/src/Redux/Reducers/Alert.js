@@ -5,7 +5,6 @@ const initialState = {
 
 export default function Alert(state = initialState, action){
     const { type, payload} = action;
-    // console.log('Desde Reducers/Alerts.js', type, payload)
 
    switch(type){
     case SET_ALERT:

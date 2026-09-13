@@ -122,7 +122,7 @@ const ProductDetails =({
         get_related_products(productId)
         get_wishlist_items()
         get_wishlist_item_total()
-    }, [])
+    }, [scrollTo, get_wishlist_items, get_product, get_related_products, get_wishlist_item_total])
 
     useEffect(() => {
         get_reviews(productId);

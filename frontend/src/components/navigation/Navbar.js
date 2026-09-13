@@ -52,26 +52,22 @@ const solutions = [
     description: "Connect with third-party tools that you're already using.",
     href: '#',
     icon: ViewGridIcon,
-  },
-]
+  }]
 const callsToAction = [
   { name: 'Watch Demo', href: '#', icon: PlayIcon },
   { name: 'View All Products', href: '#', icon: CheckCircleIcon },
-  { name: 'Contact Sales', href: '#', icon: PhoneIcon },
-]
+  { name: 'Contact Sales', href: '#', icon: PhoneIcon }]
 const company = [
   { name: 'About', href: '#', icon: InformationCircleIcon },
   { name: 'Customers', href: '#', icon: OfficeBuildingIcon },
   { name: 'Press', href: '#', icon: NewspaperIcon },
   { name: 'Careers', href: '#', icon: BriefcaseIcon },
-  { name: 'Privacy', href: '#', icon: ShieldCheckIcon },
-]
+  { name: 'Privacy', href: '#', icon: ShieldCheckIcon }]
 const resources = [
   { name: 'Community', href: '#', icon: UserGroupIcon },
   { name: 'Partners', href: '#', icon: GlobeAltIcon },
   { name: 'Guides', href: '#', icon: BookmarkAltIcon },
-  { name: 'Webinars', href: '#', icon: DesktopComputerIcon },
-]
+  { name: 'Webinars', href: '#', icon: DesktopComputerIcon }]
 const blogPosts = [
   {
     id: 1,
@@ -88,8 +84,7 @@ const blogPosts = [
     preview: 'Eget ullamcorper ac ut vulputate fames nec mattis pellentesque elementum. Viverra tempor id mus.',
     imageUrl:
       'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2300&q=80',
-  },
-]
+  }]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -120,7 +115,7 @@ function Navbar({
   useEffect(() => {
     get_categories()
     get_user_profile()
-  }, [])
+  }, [get_user_profile, get_categories])
 
   const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value });
 

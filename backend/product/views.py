@@ -22,8 +22,8 @@ class ProductDetailView(APIView):
                 status = status.HTTP_404_NOT_FOUND
             )
     
-        if Product.objects.filter(id=product_id).exists():
-            product = Product.objects.get(id=product_id)
+        if Product.objects.select_related('category').filter(id=product_id).exists():
+            product = Product.objects.select_related('category').get(id=product_id)
             product = ProductSerializer(product)
             return Response({'product':product.data}, status = status.HTTP_200_OK)
         else:
@@ -59,12 +59,12 @@ class ListProductsView(APIView):
         
         if order == 'desc':
             sortBy = '-' + sortBy
-            products = Product.objects.order_by(sortBy).all()[:int(limit)]
+            products = Product.objects.select_related('category').order_by(sortBy).all()[:int(limit)]
             print("Productooooooos",products)
         elif order == 'asc':
-              products = Product.objects.order_by(sortBy).all()[:int(limit)]
+              products = Product.objects.select_related('category').order_by(sortBy).all()[:int(limit)]
         else:
-            products = Product.objects.order_by(sortBy).all()      
+            products = Product.objects.select_related('category').order_by(sortBy).all()      
 
         products = ProductSerializer(products, many = True)
 
@@ -91,9 +91,9 @@ class ListSearchView(APIView):
         search = data.get('search', '')
 
         if len(search) == 0:
-            search_results = Product.objects.order_by('-date_created').all()
+            search_results = Product.objects.select_related('category').order_by('-date_created').all()
         else:
-            search_results = Product.objects.filter(Q(description__icontains = search)| Q(name__icontains=search))    
+            search_results = Product.objects.select_related('category').filter(Q(description__icontains = search)| Q(name__icontains=search))    
         
         if category_id == 0:
             search_results = ProductSerializer(search_results, many = True)
@@ -135,22 +135,22 @@ class ListRelatedView(APIView):
                 status=status.HTTP_404_NOT_FOUND)
         
         # Existe product id
-        if not Product.objects.filter(id=product_id).exists():
+        if not Product.objects.select_related('category').filter(id=product_id).exists():
             return Response(
                 {'error': 'Product with this product ID does not exist'},
                 status=status.HTTP_404_NOT_FOUND)
             
-        category = Product.objects.get(id=product_id).category
+        category = Product.objects.select_related('category').get(id=product_id).category
 
-        if Product.objects.filter(category=category).exists():
+        if Product.objects.select_related('category').filter(category=category).exists():
             # Si la categoria tiene padrem filtrar solo por la categoria y no el padre tambien
             if category.parent:
-                related_products = Product.objects.order_by(
+                related_products = Product.objects.select_related('category').order_by(
                     '-sold'
                 ).filter(category=category)
             else:
                 if not Category.objects.filter(parent=category).exists():
-                    related_products = Product.objects.order_by(
+                    related_products = Product.objects.select_related('category').order_by(
                         '-sold'
                     ).filter(category=category)
                 
@@ -162,7 +162,7 @@ class ListRelatedView(APIView):
                         filtered_categories.append(cat)
 
                     filtered_categories = tuple(filtered_categories)
-                    related_products = Product.objects.order_by(
+                    related_products = Product.objects.select_related('category').order_by(
                         '-sold'
                     ).filter(category__in=filtered_categories)
                 
@@ -212,7 +212,7 @@ class ListBySearchView(APIView):
 
         ## Si categoryID es = 0, filtrar todas las categorias
         if category_id == 0:
-            product_results = Product.objects.all()
+            product_results = Product.objects.select_related('category').all()
         elif not Category.objects.filter(id=category_id).exists():
             return Response(
                 {'error': 'This category does not exist'},
@@ -221,10 +221,10 @@ class ListBySearchView(APIView):
             category = Category.objects.get(id=category_id)
             if category.parent:
                 # Si la categoria tiene padrem filtrar solo por la categoria y no el padre tambien
-                product_results = Product.objects.filter(category=category)
+                product_results = Product.objects.select_related('category').filter(category=category)
             else:
                 if not Category.objects.filter(parent=category).exists():
-                    product_results = Product.objects.filter(category=category)
+                    product_results = Product.objects.select_related('category').filter(category=category)
                 else:
                     categories = Category.objects.filter(parent=category)
                     filtered_categories = [category]
@@ -233,7 +233,7 @@ class ListBySearchView(APIView):
                         filtered_categories.append(cat)
 
                     filtered_categories = tuple(filtered_categories)
-                    product_results = Product.objects.filter(
+                    product_results = Product.objects.select_related('category').filter(
                         category__in=filtered_categories)
 
         # Filtrar por precio
