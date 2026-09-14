@@ -28,7 +28,7 @@ class GetProductReviewsView(APIView):
             results = []
 
             if Review.objects.filter(product=product).exists():
-                reviews = Review.objects.order_by(
+                reviews = Review.objects.select_related('user').order_by(
                     '-date_created'
                 ).filter(product=product)
 
@@ -79,7 +79,7 @@ class GetProductReviewView(APIView):
             result = {}
 
             if Review.objects.filter(user=user, product=product).exists():
-                review = Review.objects.get(user=user, product=product)
+                review = Review.objects.select_related('user').get(user=user, product=product)
 
                 result['id'] = review.id
                 result['rating'] = review.rating
@@ -150,7 +150,7 @@ class CreateProductReviewView(APIView):
                 result['date_created'] = review.date_created
                 result['user'] = review.user.first_name
 
-                reviews = Review.objects.order_by('-date_created').filter(
+                reviews = Review.objects.select_related('user').order_by('-date_created').filter(
                     product=product
                 )
 
@@ -229,7 +229,7 @@ class UpdateProductReviewView(APIView):
                     comment=comment
                 )
 
-                review = Review.objects.get(user=user, product=product)
+                review = Review.objects.select_related('user').get(user=user, product=product)
 
                 result['id'] = review.id
                 result['rating'] = review.rating
@@ -237,7 +237,7 @@ class UpdateProductReviewView(APIView):
                 result['date_created'] = review.date_created
                 result['user'] = review.user.first_name
 
-                reviews = Review.objects.order_by('-date_created').filter(
+                reviews = Review.objects.select_related('user').order_by('-date_created').filter(
                     product=product
                 )
 
@@ -289,7 +289,7 @@ class DeleteProductReviewView(APIView):
             if Review.objects.filter(user=user, product=product).exists():
                 Review.objects.filter(user=user, product=product).delete()
 
-                reviews = Review.objects.order_by('-date_created').filter(
+                reviews = Review.objects.select_related('user').order_by('-date_created').filter(
                     product=product
                 )
 
@@ -362,11 +362,11 @@ class FilterProductReviewsView(APIView):
 
             if Review.objects.filter(product=product).exists():
                 if rating == 0.5:
-                    reviews = Review.objects.order_by('-date_created').filter(
+                    reviews = Review.objects.select_related('user').order_by('-date_created').filter(
                         rating=rating, product=product
                     )
                 else:
-                    reviews = Review.objects.order_by('-date_created').filter(
+                    reviews = Review.objects.select_related('user').order_by('-date_created').filter(
                         rating__lte=rating,
                         product=product
                     ).filter(

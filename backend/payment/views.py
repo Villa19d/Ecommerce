@@ -63,85 +63,77 @@ class GetPaymentTotalView(APIView):
                     status=status.HTTP_404_NOT_FOUND
                 )
             
-            cart_items = CartItem.objects.filter(cart=cart)
+            cart_items = CartItem.objects.select_related('product').filter(cart=cart)
+
+            total_amount = 0.0
+            total_compare_amount = 0.0
 
             for cart_item in cart_items:
-                if not Product.objects.filter(id=cart_item.product.id).exists():
-                    return Response(
-                        {'error': 'A proudct with ID provided does not exist'},
-                        status=status.HTTP_404_NOT_FOUND
-                    )
                 if int(cart_item.count) > int(cart_item.product.quantity):
                     return Response(
                         {'error': 'Not enough items in stock'},
                         status=status.HTTP_200_OK
                     )
                 
-                total_amount = 0.0
-                total_compare_amount = 0.0
+                total_amount += (float(cart_item.product.price) * float(cart_item.count))
+                total_compare_amount += (float(cart_item.product.compare_price) * float(cart_item.count))
 
-                for cart_item in cart_items:
-                    total_amount += (float(cart_item.product.price)
-                                    * float(cart_item.count))
-                    total_compare_amount += (float(cart_item.product.compare_price)
-                                            * float(cart_item.count))
+            total_compare_amount = round(total_compare_amount, 2)
+            original_price = round(total_amount, 2)
 
-                total_compare_amount = round(total_compare_amount, 2)
-                original_price = round(total_amount, 2)
+            # Cupones
+            if coupon_name != '':
+                #Revisar si cupon de precio fijo es valido
+                if FixedPriceCoupon.objects.filter(name__iexact=coupon_name).exists():
+                    fixed_price_coupon = FixedPriceCoupon.objects.get(
+                    name=coupon_name
+                )
+                discount_amount = float(fixed_price_coupon.discount_price)
+                if discount_amount < total_amount:
+                    total_amount -= discount_amount
+                    total_after_coupon = total_amount
 
-                # Cupones
-                if coupon_name != '':
-                    #Revisar si cupon de precio fijo es valido
-                    if FixedPriceCoupon.objects.filter(name__iexact=coupon_name).exists():
-                        fixed_price_coupon = FixedPriceCoupon.objects.get(
+                elif PercentageCoupon.objects.filter(name__iexact=coupon_name).exists():
+                    percentage_coupon = PercentageCoupon.objects.get(
                         name=coupon_name
                     )
-                    discount_amount = float(fixed_price_coupon.discount_price)
-                    if discount_amount < total_amount:
-                        total_amount -= discount_amount
+                    discount_percentage = float(
+                        percentage_coupon.discount_percentage)
+
+                    if discount_percentage > 1 and discount_percentage < 100:
+                        total_amount -= (total_amount *
+                                        (discount_percentage / 100))
                         total_after_coupon = total_amount
 
-                    elif PercentageCoupon.objects.filter(name__iexact=coupon_name).exists():
-                        percentage_coupon = PercentageCoupon.objects.get(
-                            name=coupon_name
-                        )
-                        discount_percentage = float(
-                            percentage_coupon.discount_percentage)
+            #Total despues del cupon 
+            total_after_coupon = round(total_after_coupon, 2)
 
-                        if discount_percentage > 1 and discount_percentage < 100:
-                            total_amount -= (total_amount *
-                                            (discount_percentage / 100))
-                            total_after_coupon = total_amount
+            # Impuesto estimado
+            estimated_tax = round(total_amount * tax, 2)
 
-                #Total despues del cupon 
-                total_after_coupon = round(total_after_coupon, 2)
+            total_amount += (total_amount * tax)
 
-                # Impuesto estimado
-                estimated_tax = round(total_amount * tax, 2)
+            shipping_cost = 0.0
+            # verificar que el envio sea valido
+            if Shipping.objects.filter(id__iexact=shipping_id).exists():
+                # agregar shipping a total amount
+                shipping = Shipping.objects.get(id=shipping_id)
+                shipping_cost = shipping.price
+                total_amount += float(shipping_cost)
+            
 
-                total_amount += (total_amount * tax)
+            total_amount = round(total_amount, 2)
 
-                shipping_cost = 0.0
-                # verificar que el envio sea valido
-                if Shipping.objects.filter(id__iexact=shipping_id).exists():
-                    # agregar shipping a total amount
-                    shipping = Shipping.objects.get(id=shipping_id)
-                    shipping_cost = shipping.price
-                    total_amount += float(shipping_cost)
-                
-
-                total_amount = round(total_amount, 2)
-
-                return Response({
-                    'original_price': f'{original_price:.2f}',
-                    'total_after_coupon': f'{total_after_coupon:.2f}',
-                    'total_amount': f'{total_amount:.2f}',
-                    'total_compare_amount': f'{total_compare_amount:.2f}',
-                    'estimated_tax': f'{estimated_tax:.2f}',
-                    'shipping_cost': f'{shipping_cost:.2f}'
-                },
-                    status=status.HTTP_200_OK
-                )
+            return Response({
+                'original_price': f'{original_price:.2f}',
+                'total_after_coupon': f'{total_after_coupon:.2f}',
+                'total_amount': f'{total_amount:.2f}',
+                'total_compare_amount': f'{total_compare_amount:.2f}',
+                'estimated_tax': f'{estimated_tax:.2f}',
+                'shipping_cost': f'{shipping_cost:.2f}'
+            },
+                status=status.HTTP_200_OK
+            )
 
         except:
             return Response(
@@ -186,27 +178,18 @@ class ProcessPaymentView(APIView):
                 status=status.HTTP_404_NOT_FOUND
             )
         
-        cart_items = CartItem.objects.filter(cart=cart)
+        cart_items = CartItem.objects.select_related('product').filter(cart=cart)
+
+        total_amount = 0.0
 
         # revisar si hay stock
-
         for cart_item in cart_items:
-            if not Product.objects.filter(id=cart_item.product.id).exists():
-                return Response(
-                    {'error': 'Transaction failed, a proudct ID does not exist'},
-                    status=status.HTTP_404_NOT_FOUND
-                )
             if int(cart_item.count) > int(cart_item.product.quantity):
                 return Response(
                     {'error': 'Not enough items in stock'},
                     status=status.HTTP_200_OK
                 )
-        
-        total_amount = 0.0
-
-        for cart_item in cart_items:
-            total_amount += (float(cart_item.product.price)
-                             * float(cart_item.count))
+            total_amount += (float(cart_item.product.price) * float(cart_item.count))
         
         # Cupones
         if coupon_name != '':
@@ -261,16 +244,16 @@ class ProcessPaymentView(APIView):
         
         if newTransaction.is_success or newTransaction.transaction:
             for cart_item in cart_items:
-                update_product = Product.objects.get(id=cart_item.product.id)
+                product = cart_item.product
 
                 #encontrar cantidad despues de coompra
-                quantity = int(update_product.quantity) - int(cart_item.count)
+                quantity = int(product.quantity) - int(cart_item.count)
 
                 #obtener cantidad de producto por vender
-                sold = int(update_product.sold) + int(cart_item.count)
+                sold = int(product.sold) + int(cart_item.count)
 
                 #actualizar el producto
-                Product.objects.filter(id=cart_item.product.id).update(
+                Product.objects.filter(id=product.id).update(
                     quantity=quantity, sold=sold
                 )
             
@@ -301,8 +284,7 @@ class ProcessPaymentView(APIView):
             
             for cart_item in cart_items:
                 try:
-                    # agarrar el producto
-                    product = Product.objects.get(id=cart_item.product.id)
+                    product = cart_item.product
 
                     OrderItem.objects.create(
                         product=product,
