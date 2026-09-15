@@ -7,7 +7,7 @@ import { get_categories } from '../../Redux/Actions/categories.js';
 import { get_search_products } from '../../Redux/Actions/products';
 import { get_user_profile } from '../../Redux/Actions/profile';
 import SearchBox from './SearchBox'
-import { ShoppingCartIcon } from '@heroicons/react/solid'
+import { ShoppingCartIcon, MoonIcon, SunIcon } from '@heroicons/react/solid'
 
 
 import {
@@ -111,6 +111,23 @@ function Navbar({
     search: ''
   });
   const { category_id, search } = formData;
+
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem('color-theme') === 'dark' ||
+    (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  );
+
+  const toggleDarkMode = () => {
+    if (isDarkMode) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('color-theme', 'light');
+      setIsDarkMode(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('color-theme', 'dark');
+      setIsDarkMode(true);
+    }
+  };
   
   useEffect(() => {
     get_categories()
@@ -140,9 +157,9 @@ function Navbar({
   }
 
   const authLinks = (
-    <Menu as="div" className="relative inline-block text-left">
+    <Menu as="div" className="relative inline-block text-left ml-4">
       <div>
-        <Menu.Button className="inline-flex justify-center w-full rounded-full  text-sm font-medium text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-indigo-500">
+        <Menu.Button className="inline-flex justify-center w-full rounded-full text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-indigo-500">
           {profile && profile.photo ? (
             <img
               className="h-10 w-10 rounded-full object-cover"
@@ -168,14 +185,14 @@ function Navbar({
         leaveFrom="transform opacity-100 scale-100"
         leaveTo="transform opacity-0 scale-95"
       >
-        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <Menu.Items className="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white dark:bg-slate-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div className="py-1">
             <Menu.Item>
               {({ active }) => (
                 <Link
                   to="/dashboard"
                   className={classNames(
-                    active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                    active ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100' : 'text-slate-700 dark:text-slate-300',
                     'block px-4 py-2 text-sm'
                   )}
                 >
@@ -191,7 +208,7 @@ function Navbar({
                   <button
                     onClick={logoutHandler}
                     className={classNames(
-                      active ? 'bg-gray-100 text-gray-900' : 'text-gray-700',
+                      active ? 'bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-slate-100' : 'text-slate-700 dark:text-slate-300',
                       'block w-full text-left px-4 py-2 text-sm'
                     )}
                   >
@@ -208,12 +225,12 @@ function Navbar({
 
   const guestLinks = (
     <Fragment>
-      <Link to="/login" className="text-base font-medium text-gray-500 hover:text-gray-900">
+      <Link to="/login" className="text-base font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100 ml-4">
         Sign in
       </Link>
       <Link
         to="/signup"
-        className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700"
+        className="ml-8 inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-full shadow-sm text-base font-medium text-white bg-indigo-600 hover:bg-indigo-700 transition-colors duration-300"
       >
         Sign up
       </Link>
@@ -222,8 +239,8 @@ function Navbar({
 
   return (
     <>
-    <Popover className="relative bg-white">
-      <div className="absolute inset-0  z-30 pointer-events-none" aria-hidden="true" />
+    <Popover className="relative bg-white dark:bg-slate-900 shadow-sm dark:border-b dark:border-slate-800 transition-colors duration-300">
+      <div className="absolute inset-0 z-30 pointer-events-none" aria-hidden="true" />
       <div className="relative z-20">
         <div className="max-w-7xl mx-auto flex justify-between items-center px-4 py-5 sm:px-6 sm:py-4 lg:px-8 md:justify-start md:space-x-10">
           <div>
@@ -251,7 +268,7 @@ function Navbar({
           <div className="hidden md:flex-1 md:flex md:items-center md:justify-between">
             <Popover.Group as="nav" className="flex space-x-10">
               
-              <NavLink to="/shop" className={window.location.pathname==='/search'?' text-base font-medium text-gray-500 hover:text-gray-900':'mt-2 text-base font-medium text-gray-500 hover:text-gray-900'}>
+              <NavLink to="/shop" className={window.location.pathname==='/search'?'text-base font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100':'mt-2 text-base font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'}>
                 Shop
               </NavLink>
               
@@ -265,9 +282,20 @@ function Navbar({
              
             </Popover.Group>
             <div className="flex items-center md:ml-12">
-              <Link to="/cart">
-                <ShoppingCartIcon className="h-8 w-8 cursor-pointer text-gray-300 mr-4"/>
-                <span className="text-xs absolute top-1 mt-3 ml-4 bg-red-500 text-white font-semibold rounded-full px-2 text-center">{total_items}</span>
+              <button
+                onClick={toggleDarkMode}
+                className="p-2 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full"
+              >
+                {isDarkMode ? (
+                  <SunIcon className="h-6 w-6" aria-hidden="true" />
+                ) : (
+                  <MoonIcon className="h-6 w-6" aria-hidden="true" />
+                )}
+              </button>
+              
+              <Link to="/cart" className="ml-4 relative">
+                <ShoppingCartIcon className="h-6 w-6 cursor-pointer text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 transition-colors"/>
+                <span className="text-xs absolute -top-1 -right-2 bg-indigo-600 text-white font-semibold rounded-full px-2 text-center">{total_items}</span>
               </Link>
               {
                 isAuthenticated ? authLinks:guestLinks
