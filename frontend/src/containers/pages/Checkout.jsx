@@ -133,7 +133,7 @@ const Checkout = ({
     useEffect(() => {
       window.scrollTo(0,0)
       get_shipping_options()
-  }, [scrollTo, get_shipping_options])
+  }, [get_shipping_options])
 
   useEffect(() => {
       get_client_token();

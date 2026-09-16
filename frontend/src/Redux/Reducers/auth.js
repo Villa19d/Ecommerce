@@ -1,4 +1,3 @@
-import { refresh } from '../Actions/auth.js';
 import {
     SIGNUP_SUCCESS,
     SIGNUP_FAIL,

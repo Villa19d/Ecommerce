@@ -14,7 +14,7 @@ const Layout = (props)=>{
     props.load_user();
   },[]);
     return(
-        <div>
+        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
           <Navbar/>
           <ToastContainer autoClose={5000}/>
           {props.children}

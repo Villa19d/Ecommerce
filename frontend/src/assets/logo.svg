@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 70" fill="none">
+  <defs>
+    <linearGradient id="nitroGrad" x1="0" y1="0" x2="60" y2="60" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#3B82F6" />
+      <stop offset="1" stopColor="#8B5CF6" />
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#nitroGrad)" />
+  <path d="M20 22H24L27 40H43L46 26H28" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="30" cy="46" r="2.5" fill="#ffffff" />
+  <circle cx="40" cy="46" r="2.5" fill="#ffffff" />
+  <path d="M37 20L31 29H38L33 36" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+
+  <text x="75" y="38" fill="#111827" font-family="sans-serif" font-size="24" font-weight="800" letter-spacing="1.5">
+    NITRO<tspan fill="#3B82F6">STORE</tspan>
+  </text>
+  <text x="76" y="53" fill="#6B7280" font-family="sans-serif" font-size="10" font-weight="600" letter-spacing="3">
+    E-COMMERCE DEMO
+  </text>
+</svg>

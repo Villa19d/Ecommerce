@@ -7097,6 +7097,11 @@ lodash.debounce@^4.0.8:
   resolved "https://registry.npmjs.org/lodash.debounce/-/lodash.debounce-4.0.8.tgz"
   integrity sha512-FT1yDzDYEoYWhnSGnpE/4Kj1fLZkDFyqRb7fNt6FdYOSxlUWAtp42Eh6Wb0rGIv/m9Bgo7x4GhQbm5Ys4SG5ow==
 
+lodash.isplainobject@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.npmjs.org/lodash.isplainobject/-/lodash.isplainobject-4.0.6.tgz"
+  integrity sha512-oSXzaWypCMHkPC3NvBEaPHf0KsA5mvPrOPgQWDsbg8n7orZ290M0BmC/jgRZ4vcJ6DTAhjrsSYgdsW/F+MFOBA==
+
 lodash.memoize@^4.1.2:
   version "4.1.2"
   resolved "https://registry.npmjs.org/lodash.memoize/-/lodash.memoize-4.1.2.tgz"
@@ -8779,6 +8784,13 @@ redux-devtools-extension@2.13.9:
   version "2.13.9"
   resolved "https://registry.npmjs.org/redux-devtools-extension/-/redux-devtools-extension-2.13.9.tgz"
   integrity sha512-cNJ8Q/EtjhQaZ71c8I9+BPySIBVEKssbPpskBfsXqb8HJ002A3KRVHfeRzwRo6mGPqsm7XuHTqNSNeS1Khig0A==
+
+redux-mock-store@^1.5.5:
+  version "1.5.5"
+  resolved "https://registry.npmjs.org/redux-mock-store/-/redux-mock-store-1.5.5.tgz"
+  integrity sha512-YxX+ofKUTQkZE4HbhYG4kKGr7oCTJfB0GLy7bSeqx86GLpGirrbUWstMnqXkqHNaQpcnbMGbof2dYs5KsPE6Zg==
+  dependencies:
+    lodash.isplainobject "^4.0.6"
 
 redux-thunk@2.4.1:
   version "2.4.1"
