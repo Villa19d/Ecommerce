@@ -71,16 +71,19 @@ const SearchBox = ({
                 onSubmit(e);
             }} className="w-full text-base font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100">
                 <div className="flex rounded-md shadow-sm border border-slate-300 dark:border-slate-600 bg-white dark:bg-slate-800">
-                    
-                    <div className="px-2 py-1 flex items-center bg-slate-50 dark:bg-slate-700 rounded-l-md border-r border-slate-300 dark:border-slate-600">
+
+                    <div className="px-2 py-1 flex items-center bg-slate-50 dark:bg-slate-700 rounded-l-md border-r border-slate-300 dark:border-slate-600"
+                    >
                         <select
                             onChange={e => onChange(e)}
                             name='category_id'
-                            className="bg-transparent border-transparent text-slate-500 dark:text-slate-300 focus:ring-0 text-sm py-1"
+                            className=" flex items-center bg-transparent border-transparent text-slate-500 dark:text-slate-300 focus:ring-0 text-sm py-1 md:w-32 cursor-pointer truncate"
+                            style={{ width: "130px" }}
+
                         >
                             <option value={0}>All</option>
                             {
-                                categories && 
+                                categories &&
                                 categories !== null &&
                                 categories !== undefined &&
                                 categories.map((category, index) => (
@@ -92,7 +95,7 @@ const SearchBox = ({
                         </select>
                     </div>
 
-                    <div className="relative flex items-stretch flex-grow focus-within:z-10">
+                    <div className="relative flex items-stretch flex-grow focus-within:z-10" style={{ width: "50px" }}>
                         <input
                             type="search"
                             name="search"
@@ -126,14 +129,14 @@ const SearchBox = ({
                     <ul className="max-h-80 overflow-y-auto py-1">
                         {suggestions.slice(0, 6).map((product) => (
                             <li key={product.id}>
-                                <Link 
+                                <Link
                                     to={`/product/${product.id}`}
                                     onClick={() => setIsDropdownOpen(false)}
                                     className="flex items-center px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
                                 >
                                     <div className="flex-shrink-0 h-10 w-10 bg-slate-100 dark:bg-slate-900 rounded overflow-hidden">
-                                        <img 
-                                            src={`${process.env.REACT_APP_API_URL}${product.photo}`} 
+                                        <img
+                                            src={`${process.env.REACT_APP_API_URL}${product.photo}`}
                                             alt={product.name}
                                             className="h-full w-full object-cover"
                                         />
@@ -165,7 +168,7 @@ const SearchBox = ({
                     )}
                 </div>
             )}
-            
+
             {/* No Results Fallback */}
             {isDropdownOpen && search.trim().length > 0 && suggestions.length === 0 && (
                 <div className="absolute z-50 mt-1 w-full bg-white dark:bg-slate-800 rounded-md shadow-lg border border-slate-200 dark:border-slate-700 p-4 text-center text-sm text-slate-500 dark:text-slate-400">

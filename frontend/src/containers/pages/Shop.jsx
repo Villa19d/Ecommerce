@@ -72,10 +72,11 @@ const Shop = ({
 }) => {
     const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
     const [filtered, setFiltered] = useState(false)
+    const [visibleCount, setVisibleCount] = useState(9) // Load 9 items initially
     const [formData, setFormData] = useState({
       category_id: '0',
       price_range: 'Any',
-      sortBy: 'created',
+      sortBy: 'sold',
       order: 'desc'
     })
 
@@ -101,7 +102,6 @@ const Shop = ({
     }
 
     const showProducts = () => {
-      let results = []
       let display = []
 
       if (
@@ -110,11 +110,9 @@ const Shop = ({
         filtered_products !== undefined &&
         filtered
       ) {
-        filtered_products.map((product, index) => {
-            return display.push(
-                <div key={index}>
-                    <ProductCard product={product}/>
-                </div>
+        filtered_products.slice(0, visibleCount).map((product, index) => {
+            display.push(
+                <ProductCard key={index} product={product}/>
             );
         });
       } else if (
@@ -123,34 +121,38 @@ const Shop = ({
           products !== null && 
           products !== undefined
       ) {
-          products.map((product, index) => {
-            return display.push(
-                <div key={index}>
-                    <ProductCard product={product}/>
-                </div>
+          products.slice(0, visibleCount).map((product, index) => {
+            display.push(
+                <ProductCard key={index} product={product}/>
             );
         });
       }
 
-      for (let i = 0; i < display.length; i += 3) {
-        results.push(
-          <div key={i} className='grid md:grid-cols-3 '>
-              {display[i] ? display[i] : <div className=''></div>}
-              {display[i+1] ? display[i+1] : <div className=''></div>}
-              {display[i+2] ? display[i+2] : <div className=''></div>}
+      return (
+        <>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {display}
           </div>
-        )
-      }
-
-      return results
-
+          {((filtered && filtered_products && visibleCount < filtered_products.length) || 
+            (!filtered && products && visibleCount < products.length)) && (
+            <div className="mt-12 flex justify-center">
+              <button
+                onClick={() => setVisibleCount(prev => prev + 6)}
+                className="px-6 py-3 border border-transparent text-base font-medium rounded-full shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300"
+              >
+                Cargar más productos
+              </button>
+            </div>
+          )}
+        </>
+      )
     }
 
 
 
     return (
         <Layout>
-            <div className="bg-white dark:bg-slate-900 transition-colors duration-300">
+            <div className="bg-slate-50 dark:bg-slate-800 transition-colors duration-300">
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -380,8 +382,11 @@ const Shop = ({
         </Transition.Root>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200 dark:border-slate-800">
-            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">Shop</h1>
+          <div className="relative z-10 flex flex-col sm:flex-row sm:items-end justify-between pt-24 pb-6 border-b border-gray-200 dark:border-slate-700">
+            <div>
+              <h1 className="text-4xl sm:text-5xl font-extrabold tracking-tight text-gray-900 dark:text-white">Nuestra Colección</h1>
+              <p className="mt-2 text-base text-gray-500 dark:text-slate-400">Explora todos nuestros productos y encuentra lo que necesitas.</p>
+            </div>
 
             <div className="flex items-center">
               <button

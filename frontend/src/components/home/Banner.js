@@ -1,15 +1,17 @@
-export default function Example() {
+import { Link } from 'react-router-dom';
+
+export default function Banner() {
     return (
-      <div className="relative bg-white overflow-hidden">
-        <div className="pt-16 pb-80 sm:pt-24 sm:pb-40 lg:pt-40 lg:pb-48">
+      <div className="relative bg-transparent overflow-hidden transition-colors duration-300 flex items-center min-h-[calc(100vh-100px)]">
+        <div className="w-full pt-16 pb-80 sm:pt-24 sm:pb-40 lg:pt-32 lg:pb-48">
           <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 sm:static">
             <div className="sm:max-w-lg">
-              <h1 className="text-4xl font font-extrabold tracking-tight text-gray-900 sm:text-6xl">
-                Summer styles are finally here
+              <h1 className="text-4xl font font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-6xl">
+                Nuevos estilos tecnológicos
               </h1>
-              <p className="mt-4 text-xl text-gray-500">
-                This year, our new summer collection will shelter you from the harsh elements of a world that doesn't care
-                if you live or die.
+              <p className="mt-4 text-xl text-gray-500 dark:text-slate-400">
+                Llevamos el rendimiento y el estilo a un nuevo nivel. Explora nuestra nueva colección, 
+                diseñada para brindarte la mejor experiencia tecnológica.
               </p>
             </div>
             <div>
@@ -80,17 +82,16 @@ export default function Example() {
                   </div>
                 </div>
   
-                <a
-                  href="#"
-                  className="inline-block text-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-indigo-700"
+                <Link
+                  to="/shop"
+                  className="inline-block text-center bg-indigo-600 border border-transparent rounded-md py-3 px-8 font-medium text-white hover:bg-indigo-700 transition-colors duration-300 pointer-events-auto shadow-md"
                 >
                   Shop Collection
-                </a>
+                </Link>
               </div>
             </div>
           </div>
         </div>
       </div>
     )
-  }
-  
+}

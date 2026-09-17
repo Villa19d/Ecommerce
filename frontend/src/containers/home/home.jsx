@@ -9,6 +9,7 @@ import {
 import Banner from '../../components/home/Banner'
 import ProductsArrival from '../../components/home/ProductsArrival'
 import ProductsSold from '../../components/home/ProductsSold'
+import FadeInScroll from '../../components/animations/FadeInScroll'
 
 const Home = ({ 
     get_products_by_arrival, 
@@ -25,10 +26,17 @@ const Home = ({
 
     return(
         <Layout>
-            <div className="text-blue-500">
+            <div className="bg-slate-50 dark:bg-slate-800 transition-colors duration-300">
                 <Banner/>
-                <ProductsArrival data={products_arrival}/>
-                <ProductsSold data={products_sold}/>
+                <div className="py-16 space-y-16">
+                    <FadeInScroll>
+                        <ProductsArrival data={products_arrival}/>
+                    </FadeInScroll>
+                    
+                    <FadeInScroll>
+                        <ProductsSold data={products_sold}/>
+                    </FadeInScroll>
+                </div>
             </div>
         </Layout>
     )

@@ -150,7 +150,7 @@ const Search = ({
     return (
         <div>
             <Navbar/>
-            <div className="bg-white dark:bg-slate-900 transition-colors duration-300">
+            <div className="bg-slate-50 dark:bg-slate-800 transition-colors duration-300">
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
