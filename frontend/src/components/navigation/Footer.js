@@ -12,7 +12,7 @@ function Footer() {
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                className="h-15 w-auto"
+                className="h-10 w-auto"
                 src={logo}
                 alt="Logo"
               />

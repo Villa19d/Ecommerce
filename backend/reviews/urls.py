@@ -8,4 +8,5 @@ urlpatterns = [
     path('update-review/<productId>', UpdateProductReviewView.as_view()),
     path('delete-review/<productId>', DeleteProductReviewView.as_view()),
     path('filter-reviews/<productId>', FilterProductReviewsView.as_view()),
+    path('like/<reviewId>', LikeReviewView.as_view()),
 ]

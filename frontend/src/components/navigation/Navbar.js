@@ -111,14 +111,14 @@ function Navbar({
     <>
       <Popover className="relative bg-white dark:bg-slate-900 shadow-sm dark:border-b dark:border-slate-800 transition-colors duration-300 z-40">
         <div className="absolute inset-0 z-30 pointer-events-none" aria-hidden="true" />
-        <div className="relative z-20 max-w-[1600px] w-full mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative z-20 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-5 md:py-6 md:space-x-10">
 
             {/* Logo Section */}
             <div className="flex justify-start flex-shrink-0">
               <Link to="/" className="flex">
                 <span className="sr-only">NitroStore</span>
-                <Logo className="h-12 w-auto sm:h-14 lg:h-16" />
+                <Logo className="h-10 w-auto" />
               </Link>
             </div>
 
@@ -138,7 +138,7 @@ function Navbar({
             {/* Desktop Center: Search Box & Navigation */}
             <div className="hidden md:flex flex-1 items-center justify-center px-2 lg:ml-8">
               <div className="w-full max-w-[700px] px-4 flex items-center space-x-10">
-                <NavLink to="/shop" className={window.location.pathname === '/search' ? 'text-xl md:text-2xl font-semibold text-slate-900 dark:text-white' : 'text-xl md:text-2xl font-semibold text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'}>
+                <NavLink to="/shop" className={window.location.pathname === '/search' ? 'text-lg font-medium text-slate-900 dark:text-white' : 'text-base font-medium text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-slate-100'}>
                   Shop
                 </NavLink>
                 <div className="flex-1 w-full relative">
@@ -161,14 +161,14 @@ function Navbar({
                 className="p-2 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full"
               >
                 {isDarkMode ? (
-                  <SunIcon className="h-9 w-9" aria-hidden="true" />
+                  <SunIcon className="h-6 w-6" aria-hidden="true" />
                 ) : (
-                  <MoonIcon className="h-9 w-9" aria-hidden="true" />
+                  <MoonIcon className="h-6 w-6" aria-hidden="true" />
                 )}
               </button>
 
               <Link to="/cart" className="relative group">
-                <ShoppingCartIcon className="h-10 w-10 cursor-pointer text-slate-400 group-hover:text-slate-500 dark:group-hover:text-slate-300 transition-colors" />
+                <ShoppingCartIcon className="h-7 w-7 cursor-pointer text-slate-400 group-hover:text-slate-500 dark:group-hover:text-slate-300 transition-colors" />
                 <span className="text-sm absolute -top-1 -right-2 bg-indigo-600 text-white font-bold rounded-full px-2 py-0.5 text-center">{total_items}</span>
               </Link>
 

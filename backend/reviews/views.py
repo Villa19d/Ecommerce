@@ -3,6 +3,8 @@ from rest_framework.response import Response
 from rest_framework import permissions, status
 from product.models import Product
 from .models import Review
+from .serializers import ReviewSerializer
+from django.db.models import Count
 
 class GetProductReviewsView(APIView):
     permission_classes = (permissions.AllowAny, )
@@ -24,33 +26,41 @@ class GetProductReviewsView(APIView):
                 )
             
             product = Product.objects.get(id=product_id)
+            
+            # Paginacion y filtros
+            sort_by = request.query_params.get('sort', 'recent') # recent o top
+            page = int(request.query_params.get('page', 1))
+            limit = 10
+            offset = (page - 1) * limit
 
-            results = []
+            # Solo traer comentarios padre (no respuestas)
+            reviews_qs = Review.objects.filter(product=product, parent__isnull=True)
 
-            if Review.objects.filter(product=product).exists():
-                reviews = Review.objects.select_related('user').order_by(
-                    '-date_created'
-                ).filter(product=product)
+            if sort_by == 'top':
+                reviews_qs = reviews_qs.annotate(like_count=Count('likes')).order_by('-like_count', '-date_created')
+            else:
+                reviews_qs = reviews_qs.order_by('-date_created')
+                
+            total_reviews = reviews_qs.count()
+            reviews_qs = reviews_qs[offset:offset+limit]
 
-                for review in reviews:
-                    item = {}
-
-                    item['id'] = review.id
-                    item['rating'] = review.rating
-                    item['comment'] = review.comment
-                    item['date_created'] = review.date_created
-                    item['user'] = review.user.first_name
-
-                    results.append(item)
+            # Pasar el request al serializer para evaluar 'has_liked'
+            serializer = ReviewSerializer(reviews_qs, many=True, context={'request': request})
             
             return Response(
-                {'reviews': results},
+                {
+                    'reviews': serializer.data,
+                    'total_reviews': total_reviews,
+                    'has_more': (offset + limit) < total_reviews
+                },
                 status=status.HTTP_200_OK
             )
 
-        except:
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
             return Response(
-                {'error': 'Something went wrong when retrieving reviews'},
+                {'error': f'Something went wrong when retrieving reviews: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
     
@@ -58,6 +68,9 @@ class GetProductReviewsView(APIView):
 class GetProductReviewView(APIView):
     def get(self, request, productId, format=None):
         user = self.request.user
+        
+        if not user.is_authenticated:
+            return Response({'review': {}}, status=status.HTTP_200_OK)
 
         try:
             product_id = int(productId)
@@ -82,7 +95,7 @@ class GetProductReviewView(APIView):
                 review = Review.objects.select_related('user').get(user=user, product=product)
 
                 result['id'] = review.id
-                result['rating'] = review.rating
+                result['rating'] = float(review.rating)
                 result['comment'] = review.comment
                 result['date_created'] = review.date_created
                 result['user'] = review.user.first_name
@@ -91,9 +104,11 @@ class GetProductReviewView(APIView):
                 {'review': result},
                 status=status.HTTP_200_OK
             )
-        except:
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
             return Response(
-                {'error': 'Something went wrong when retrieving review'},
+                {'error': f'Something went wrong when retrieving review: {str(e)}'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
 
@@ -394,3 +409,29 @@ class FilterProductReviewsView(APIView):
                 {'error': 'Something went wrong when filtering reviews for product'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class LikeReviewView(APIView):
+    def post(self, request, reviewId, format=None):
+        user = self.request.user
+        if not user.is_authenticated:
+            return Response({'error': 'Must be authenticated to like a review'}, status=status.HTTP_401_UNAUTHORIZED)
+            
+        try:
+            review_id = int(reviewId)
+            review = Review.objects.get(id=review_id)
+            
+            if review.likes.filter(id=user.id).exists():
+                review.likes.remove(user)
+                liked = False
+            else:
+                review.likes.add(user)
+                liked = True
+                
+            return Response({'liked': liked, 'likes_count': review.likes.count()}, status=status.HTTP_200_OK)
+            
+        except Review.DoesNotExist:
+            return Response({'error': 'Review not found'}, status=status.HTTP_404_NOT_FOUND)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
