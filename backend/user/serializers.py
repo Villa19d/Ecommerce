@@ -13,5 +13,6 @@ class UserCreateSerializer(UserCreateSerializer):
             'email',
             'password',
             'getCompleteName',
-            'getShortName'
+            'getShortName',
+            'photo'
         )

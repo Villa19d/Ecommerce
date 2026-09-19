@@ -5,17 +5,19 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 
 class ReviewSerializer(serializers.ModelSerializer):
+    user_id = serializers.IntegerField(source='user.id', read_only=True)
     user_name = serializers.CharField(source='user.first_name', read_only=True)
+    user_photo = serializers.ImageField(source='user.photo', read_only=True)
     likes_count = serializers.SerializerMethodField()
     has_liked = serializers.SerializerMethodField()
-    replies = serializers.SerializerMethodField()
+    replies_count = serializers.SerializerMethodField()
 
     class Meta:
         model = Review
         fields = [
-            'id', 'user_name', 'rating', 'comment', 
+            'id', 'user_id', 'user_name', 'user_photo', 'rating', 'comment', 
             'date_created', 'date_updated', 'parent', 
-            'likes_count', 'has_liked', 'replies'
+            'likes_count', 'has_liked', 'replies_count'
         ]
 
     def get_likes_count(self, obj):
@@ -27,9 +29,5 @@ class ReviewSerializer(serializers.ModelSerializer):
             return obj.likes.filter(id=request.user.id).exists()
         return False
 
-    def get_replies(self, obj):
-        if obj.replies.exists():
-            # Get only immediate children
-            replies = obj.replies.all().order_by('date_created')
-            return ReviewSerializer(replies, many=True, context=self.context).data
-        return []
+    def get_replies_count(self, obj):
+        return obj.replies.count()

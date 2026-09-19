@@ -15,23 +15,27 @@ import {
 } from './types';
 
 
-export const get_reviews = product_id => async dispatch => {
+export const get_reviews = (product_id, page = 1, sort = 'recent') => async dispatch => {
     const config = {
         headers: {
             'Accept': 'application/json',
         }
     };
 
+    if (localStorage.getItem('access')) {
+        config.headers['Authorization'] = `JWT ${localStorage.getItem('access')}`;
+    }
+
     try {
         const res = await axios.get(
-            `${process.env.REACT_APP_API_URL}/api/reviews/get-reviews/${product_id}`, 
+            `${process.env.REACT_APP_API_URL}/api/reviews/get-reviews/${product_id}?page=${page}&sort=${sort}`, 
             config
         );
 
         if (res.status === 200) {
             dispatch({
                 type: GET_REVIEWS_SUCCESS,
-                payload: res.data
+                payload: { ...res.data, page, sort } // Pasamos page y sort al reducer
             });
         } else {
             dispatch({
@@ -41,6 +45,40 @@ export const get_reviews = product_id => async dispatch => {
     } catch(err) {
         dispatch({
             type: GET_REVIEWS_FAIL
+        });
+    }
+}
+
+export const get_replies = (review_id, page = 1) => async dispatch => {
+    const config = {
+        headers: {
+            'Accept': 'application/json',
+        }
+    };
+
+    if (localStorage.getItem('access')) {
+        config.headers['Authorization'] = `JWT ${localStorage.getItem('access')}`;
+    }
+
+    try {
+        const res = await axios.get(
+            `${process.env.REACT_APP_API_URL}/api/reviews/get-replies/${review_id}?page=${page}`, 
+            config
+        );
+
+        if (res.status === 200) {
+            dispatch({
+                type: 'GET_REPLIES_SUCCESS',
+                payload: { ...res.data, review_id, page }
+            });
+        } else {
+            dispatch({
+                type: 'GET_REPLIES_FAIL'
+            });
+        }
+    } catch(err) {
+        dispatch({
+            type: 'GET_REPLIES_FAIL'
         });
     }
 }
@@ -79,7 +117,7 @@ export const get_review = product_id => async dispatch => {
     }
 }
 
-export const create_review = (product_id, rating, comment) => async dispatch => {
+export const create_review = (product_id, rating, comment, parent_id = null) => async dispatch => {
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -91,7 +129,8 @@ export const create_review = (product_id, rating, comment) => async dispatch => 
 
         const body = JSON.stringify({
             rating,
-            comment
+            comment,
+            parent_id
         });
 
         try {
@@ -119,7 +158,7 @@ export const create_review = (product_id, rating, comment) => async dispatch => 
     }
 }
 
-export const update_review = (product_id, rating, comment) => async dispatch => {
+export const update_review = (review_id, rating, comment) => async dispatch => {
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -136,7 +175,7 @@ export const update_review = (product_id, rating, comment) => async dispatch => 
 
         try {
             const res = await axios.put(
-                `${process.env.REACT_APP_API_URL}/api/reviews/update-review/${product_id}`,
+                `${process.env.REACT_APP_API_URL}/api/reviews/update-review/${review_id}`,
                 body,
                 config
             );
@@ -159,7 +198,7 @@ export const update_review = (product_id, rating, comment) => async dispatch => 
     }
 }
 
-export const delete_review = product_id => async dispatch => {
+export const delete_review = review_id => async dispatch => {
     if (localStorage.getItem('access')) {
         const config = {
             headers: {
@@ -171,23 +210,57 @@ export const delete_review = product_id => async dispatch => {
 
         try {
             const res = await axios.delete(
-                `${process.env.REACT_APP_API_URL}/api/reviews/delete-review/${product_id}`,
+                `${process.env.REACT_APP_API_URL}/api/reviews/delete-review/${review_id}`,
                 config
             );
 
             if (res.status === 200) {
                 dispatch({
                     type: DELETE_REVIEW_SUCCESS,
-                    payload: res.data
+                    payload: review_id // Pass the review_id to remove it from state
                 });
             } else {
                 dispatch({
-                    tye: DELETE_REVIEW_FAIL
+                    type: DELETE_REVIEW_FAIL
                 });
             }
         } catch(err) {
             dispatch({
-                tye: DELETE_REVIEW_FAIL
+                type: DELETE_REVIEW_FAIL
+            });
+        }
+    }
+}
+
+export const like_review = review_id => async dispatch => {
+    if (localStorage.getItem('access')) {
+        const config = {
+            headers: {
+                'Authorization': `JWT ${localStorage.getItem('access')}`,
+                'Accept': 'application/json',
+            }
+        };
+
+        try {
+            const res = await axios.post(
+                `${process.env.REACT_APP_API_URL}/api/reviews/like/${review_id}`,
+                {},
+                config
+            );
+
+            if (res.status === 200) {
+                dispatch({
+                    type: 'LIKE_REVIEW_SUCCESS',
+                    payload: { review_id, liked: res.data.liked, likes_count: res.data.likes_count }
+                });
+            } else {
+                dispatch({
+                    type: 'LIKE_REVIEW_FAIL'
+                });
+            }
+        } catch(err) {
+            dispatch({
+                type: 'LIKE_REVIEW_FAIL'
             });
         }
     }

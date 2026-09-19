@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 from product.models import Product
 from django.db import models
 
@@ -11,7 +11,7 @@ class Review(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     rating = models.DecimalField(max_digits=2, decimal_places=1, null=True, blank=True)
     comment = models.TextField()
-    date_created = models.DateTimeField(default=datetime.now)
+    date_created = models.DateTimeField(auto_now_add=True)
     date_updated = models.DateTimeField(auto_now=True)
     
     # Sistema de respuestas (YouTube style)

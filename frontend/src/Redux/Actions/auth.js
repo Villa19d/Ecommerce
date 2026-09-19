@@ -186,7 +186,7 @@ export const load_user = ()=> async dispatch => {
 
     }
     try{
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/users/me`,config);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/users/me/`,config);
 
       if(res.status === 200){
         dispatch({
@@ -222,7 +222,7 @@ export const check_authenticated =()=> async dispatch => {
           token: localStorage.getItem('access')
         })
         try{
-          const res =  await axios.post(`${process.env.REACT_APP_API_URL}/auth/jwt/verify`, body,config);
+          const res =  await axios.post(`${process.env.REACT_APP_API_URL}/auth/jwt/verify/`, body,config);
           if(res.status === 200){
             dispatch({
               type:AUTHENTICATED_SUCCESS

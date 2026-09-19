@@ -32,6 +32,7 @@ import { useEffect, useState } from "react";
 import ImageGallery from "../../components/product/ImageGallery";
 import WishlistHeart from "../../components/product/WhishListHeart";
 import { Navigate } from "react-router";
+import CommentSection from "../../components/reviews/CommentSection";
 
 import Stars from '../../components/product/Stars'
 
@@ -253,100 +254,9 @@ const ProductDetails =({
                         </div>
                     </div>
 
-                    {/* Sección de Reseñas */}
+                    {/* Sección de Reseñas (Estilo YouTube) */}
                     <div className="mt-16 bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border border-slate-100 dark:border-slate-700">
-                        <div className="flex items-center justify-between border-b border-slate-200 dark:border-slate-700 pb-6 mb-8">
-                            <h2 className="text-2xl font-extrabold text-gray-900 dark:text-white">Reseñas de Clientes</h2>
-                            <button
-                                className='px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-slate-700 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-200 font-medium rounded-lg transition-colors'
-                                onClick={getReviews}
-                            >
-                                Mostrar todas
-                            </button>
-                        </div>
-
-                        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
-                            {/* Formulario de Reseña */}
-                            <div className="lg:col-span-1 bg-slate-50 dark:bg-slate-900/50 p-6 rounded-xl border border-slate-100 dark:border-slate-700 h-fit">
-                                <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-4">
-                                    {review && isAuthenticated ? "Actualiza tu reseña" : "Escribe una reseña"}
-                                </h3>
-                                
-                                <form onSubmit={review && isAuthenticated ? updateReview : leaveReview} className="space-y-4">
-                                    <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
-                                            Tu calificación
-                                        </label>
-                                        <select
-                                            name="rating"
-                                            required
-                                            value={rating}
-                                            onChange={e=>onChange(e)}
-                                            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-2 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors"
-                                        >
-                                            <option value="">Selecciona estrellas</option>
-                                            <option value="5">⭐⭐⭐⭐⭐ (Excelente)</option>
-                                            <option value="4">⭐⭐⭐⭐ (Muy Bueno)</option>
-                                            <option value="3">⭐⭐⭐ (Bueno)</option>
-                                            <option value="2">⭐⭐ (Regular)</option>
-                                            <option value="1">⭐ (Malo)</option>
-                                        </select>
-                                    </div>
-
-                                    <div>
-                                        <label htmlFor="comment" className="block text-sm font-medium text-gray-700 dark:text-slate-300 mb-2">
-                                            Tu opinión
-                                        </label>
-                                        <textarea
-                                            rows={4}
-                                            name="comment"
-                                            id="comment"
-                                            required
-                                            value={comment}
-                                            onChange={e=>onChange(e)}
-                                            placeholder={review && isAuthenticated ? review.comment : "¿Qué te pareció este producto?"}
-                                            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-4 py-3 text-slate-900 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-colors resize-none shadow-inner"
-                                        />
-                                    </div>
-                                    
-                                    <button
-                                        type="submit"
-                                        className="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-bold rounded-lg shadow-md hover:shadow-lg transition-all transform active:scale-95"
-                                    >
-                                        {review && isAuthenticated ? "Actualizar Reseña" : "Publicar Reseña"}
-                                    </button>
-                                </form>
-                            </div>
-
-                            {/* Lista de Reseñas */}
-                            <div className="lg:col-span-2 space-y-6">
-                                {reviews && reviews.length > 0 ? reviews.map((review,index)=>(
-                                    <div key={index} className="bg-white dark:bg-slate-800 p-6 rounded-xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-shadow">
-                                        <div className="flex items-start">
-                                            <div className="flex-shrink-0">
-                                                <div className="h-12 w-12 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xl shadow-inner">
-                                                    {review.user ? review.user.charAt(0).toUpperCase() : "U"}
-                                                </div>
-                                            </div>
-                                            <div className="ml-4 flex-1">
-                                                <div className="flex items-center justify-between">
-                                                    <h4 className="text-lg font-bold text-gray-900 dark:text-white">{review.user}</h4>
-                                                    <Stars rating={review.rating}/>
-                                                </div>
-                                                <p className="mt-3 text-gray-600 dark:text-slate-300 text-base leading-relaxed">
-                                                    "{review.comment}"
-                                                </p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                )) : (
-                                    <div className="text-center py-12 bg-slate-50 dark:bg-slate-900/50 rounded-xl border border-dashed border-slate-300 dark:border-slate-700">
-                                        <p className="text-slate-500 dark:text-slate-400 text-lg">Aún no hay reseñas para este producto.</p>
-                                        <p className="text-slate-400 dark:text-slate-500 text-sm mt-1">¡Sé el primero en dejar tu opinión!</p>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
+                        <CommentSection productId={productId} />
                     </div>
                 </div>
             </div>
@@ -357,6 +267,7 @@ const ProductDetails =({
 const mapStateToProps = state => ({
     product: state.Products.product,
     isAuthenticated: state.Auth.isAuthenticated,
+    user: state.Auth.user,
     wishlist: state.Wishlist.items,
     review: state.Reviews.review,
     reviews: state.Reviews.reviews
