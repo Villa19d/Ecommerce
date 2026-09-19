@@ -255,7 +255,7 @@ const ProductDetails =({
                     </div>
 
                     {/* Sección de Reseñas (Estilo YouTube) */}
-                    <div className="mt-16 bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-8 border border-slate-100 dark:border-slate-700">
+                    <div className="mt-16 bg-white dark:bg-slate-800 rounded-2xl shadow-lg p-4 sm:p-8 border border-slate-100 dark:border-slate-700">
                         <CommentSection productId={productId} />
                     </div>
                 </div>

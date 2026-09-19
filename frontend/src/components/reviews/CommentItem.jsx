@@ -7,6 +7,11 @@ import Stars from '../product/Stars';
 
 moment.locale('es');
 
+const getInitial = (name) => {
+    if (!name) return '?';
+    return name.charAt(0).toUpperCase();
+};
+
 const CommentItem = ({ 
     review, 
     productId, 
@@ -24,17 +29,15 @@ const CommentItem = ({
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(review.comment);
     
-    const [showMenu, setShowMenu] = useState(false);
     const [showReplies, setShowReplies] = useState(false);
 
     // Utilizamos el ID para mayor seguridad y evitar problemas de coincidencia de strings (parseamos a Number)
     const isOwner = currentUser && (Number(review.user_id) === Number(currentUser.id) || review.user_name === currentUser.first_name);
     
-    console.log(`[DEBUG isOwner] currentUser:`, currentUser);
-    console.log(`[DEBUG isOwner] review:`, review);
-    
     // Evitar que pequeñas diferencias marquen como "editado" al momento de crear
-    const isEdited = moment(review.date_updated).diff(moment(review.date_created), 'seconds') > 5;
+    const isEdited = React.useMemo(() => {
+        return moment(review.date_updated).diff(moment(review.date_created), 'seconds') > 5;
+    }, [review.date_updated, review.date_created]);
 
     const submitReply = (e) => {
         e.preventDefault();
@@ -51,13 +54,7 @@ const CommentItem = ({
         if (editText.trim()) {
             handleUpdate(review.id, review.rating, editText);
             setIsEditing(false);
-            setShowMenu(false);
         }
-    };
-
-    const getInitial = (name) => {
-        if (!name) return '?';
-        return name.charAt(0).toUpperCase();
     };
 
     const displayInitial = getInitial(currentUser?.first_name || currentUser?.email);

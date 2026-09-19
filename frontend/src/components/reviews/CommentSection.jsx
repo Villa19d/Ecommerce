@@ -11,6 +11,11 @@ import {
 import CommentItem from './CommentItem';
 import InteractiveStars from './InteractiveStars';
 
+const getInitial = (name) => {
+    if (!name) return '?';
+    return name.charAt(0).toUpperCase();
+};
+
 const CommentSection = ({ 
     productId, 
     reviews, 
@@ -52,11 +57,6 @@ const CommentSection = ({
             setNewComment('');
             setRating(5.0);
         }
-    };
-
-    const getInitial = (name) => {
-        if (!name) return '?';
-        return name.charAt(0).toUpperCase();
     };
 
     const displayInitial = getInitial(user?.first_name || user?.email);
