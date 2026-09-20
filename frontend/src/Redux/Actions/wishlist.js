@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { setAlert } from './Alert';
 import {
     GET_WISHLIST_ITEMS_SUCCESS,
     GET_WISHLIST_ITEMS_FAIL,
@@ -40,7 +41,16 @@ export const get_wishlist_items = () => async dispatch => {
     }
 }
 
-export const add_wishlist_item = product_id => async dispatch => {
+export const add_wishlist_item = product_id => async (dispatch, getState) => {
+    const state = getState();
+    const currentItems = state.Wishlist?.items || [];
+    const itemExists = currentItems.find(item => item.product.id.toString() === product_id.toString());
+    
+    if (!itemExists && currentItems.length >= 20) {
+        dispatch(setAlert('El límite de tu Wishlist es de 20 artículos', 'red'));
+        return;
+    }
+
     if (localStorage.getItem('access')) {
         const config = {
             headers: {

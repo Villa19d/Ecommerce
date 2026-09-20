@@ -12,30 +12,16 @@ const Activate =({
     loading
 })=>{
     
-    useEffect(() => {
-        // Código que se ejecuta al cargar la página
-        
-        activate_account();
-
-        return () => {
-            // console.log("ACtivando...");
-        };
-    }, []); /* El array vacío [] asegura que esto se ejecute solo una vez*/
-
-    console.log(useParams())
-    console.log(useParams().uid+'- - - -', useParams().token)
-    
-
     const { uid, token } = useParams(); // Desestructurar los parámetros de useParams una vez
     const [activated, setActivated] = useState(false);
     const [navigate, setNavigate] = useState(false);
 
-
-    const activate_account = () => {
-        activate(uid, token);
-        setActivated(true);
-        // console.log('Activado')
-    };
+    useEffect(() => {
+        if (uid && token && !activated) {
+            activate(uid, token);
+            setActivated(true);
+        }
+    }, [uid, token, activate, activated]);
 
     const ok = ()=>{
         console.log("Activación completada, volviendo a Home");
@@ -43,7 +29,7 @@ const Activate =({
     }
 
     if (navigate) {
-        return <Navigate to="/" />;
+        return <Navigate to="/login" />;
     }   
     return(
         <Layout>

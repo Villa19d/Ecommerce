@@ -24,13 +24,13 @@ import {
 
 import {setAlert} from './Alert.js'
 import axios from 'axios';
+import { synch_cart, get_items, get_total, get_item_total } from './cart';
 
 //Acá añadimos los datos que usamos en postman para los usuarios 
 /*Esta función signup es una acción de Redux. 
    Se encarga de gestionar el proceso de registro de un usuario.*/
 export const signup = (first_name,last_name,email,password,re_password)=> async dispatch => {
       // Configura los headers para la solicitud HTTP
-      // console.log('Start auth.js function signup')
 
       dispatch({
         type:SET_AUTH_LOADING
@@ -40,7 +40,6 @@ export const signup = (first_name,last_name,email,password,re_password)=> async 
             'Content-Type': 'application/json'
         }
     };
-  //  console.log(config)
    const body = JSON.stringify({
     first_name,
     last_name,
@@ -48,14 +47,12 @@ export const signup = (first_name,last_name,email,password,re_password)=> async 
     password,
     re_password
    });
-   console.log(body);
    let res;
    try{
          // Envía la solicitud POST a la API para registrar al usuario
       res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/users/`,body,config);
      // Si la respuesta tiene un estado 201 (creado exitosamente)
      if(res.status === 201){
-      // console.log("super")
         dispatch({  //despacha una acción a la tienda de Redux. Una acción es simplemente un objeto que describe algo que sucedió, y dispatch es el mecanismo para actualizar el estado en el store de Redux con base en esa acción.
             type:SIGNUP_SUCCESS,
             payload: res.data  // La información del usuario recién registrado
@@ -64,7 +61,6 @@ export const signup = (first_name,last_name,email,password,re_password)=> async 
         }
 
      else{
-      // console.log('fail')
        // Si no es un estado 201, despacha la acción SIGNUP_FAIL
         dispatch({
             type:SIGNUP_FAIL
@@ -76,7 +72,6 @@ export const signup = (first_name,last_name,email,password,re_password)=> async 
     })
    
    }catch(e){
-    console.log(e+' fail')
     console.error(e.response?.data); // Esto ayudará a ver detalles del error
     // Si ocurre un error durante la solicitud, despacha la acción SIGNUP_FAIL
     dispatch({
@@ -90,7 +85,6 @@ export const signup = (first_name,last_name,email,password,re_password)=> async 
 }
 
 export const activate = (uid,token)=> async dispatch => {
-  console.log('Activando cuenta...')
   dispatch({
     type:SET_AUTH_LOADING
   }); 
@@ -107,15 +101,12 @@ export const activate = (uid,token)=> async dispatch => {
 
    try{
     const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/users/activation/`,body,config);
-    console.log('Por ahora sin error...la res es =' + res.status);
     if(res.status  === 204){
-      console.log('A dispatch de activation success')
       dispatch({
         type:ACTIVATION_SUCCESS
       });
       dispatch(setAlert('Cuenta Activada Correctamente', 'green'))
     }else{
-      console.log('A dispatch de activation fail')
       dispatch({
         type:ACTIVATION_FAIL
       });
@@ -125,7 +116,6 @@ export const activate = (uid,token)=> async dispatch => {
       type:REMOVE_AUTH_LOADING
     })
   }catch(e){
-    console.log(e)
     console.error(e.response?.data); // Esto ayudará a ver detalles del error
      dispatch({
       type:ACTIVATION_FAIL
@@ -138,8 +128,6 @@ export const activate = (uid,token)=> async dispatch => {
 };
 
 export const login = (email,password) => async dispatch =>{
-  console.log('Estamos en la función login... email--->', email)
-  console.log('Password--->', password)
   dispatch({
     type:SET_AUTH_LOADING
   });
@@ -155,12 +143,9 @@ export const login = (email,password) => async dispatch =>{
     email,
     password
   })
-  console.log('----------')
 
   try{
-     console.log('||||||||||||||||||||')
      const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/jwt/create/`,body,config);
-     console.log('resdata es',res.data)
      if(res.status === 200){
       dispatch({
         type:LOGIN_SUCCESS,
@@ -170,6 +155,10 @@ export const login = (email,password) => async dispatch =>{
       dispatch({
         type:REMOVE_AUTH_LOADING
       });
+      await dispatch(synch_cart());
+      dispatch(get_items());
+      dispatch(get_total());
+      dispatch(get_item_total());
       dispatch(setAlert('Inicio de sesión exitoso', 'green'))
      }else{
       dispatch({
@@ -181,7 +170,6 @@ export const login = (email,password) => async dispatch =>{
       dispatch(setAlert('Error al inciar sesion', 'red'))
      } 
   }catch(e){
-    console.log(e)
     console.error(e.response?.data); // Esto ayudará a ver detalles del error
       dispatch({
         type:LOGIN_FAIL
@@ -194,7 +182,6 @@ export const login = (email,password) => async dispatch =>{
 }
 
 export const load_user = ()=> async dispatch => {
-  // console.log('Aca estamos en la funcion load_user')
   if(localStorage.getItem('access')){
     const config = {
       headers:{
@@ -204,7 +191,7 @@ export const load_user = ()=> async dispatch => {
 
     }
     try{
-      const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/users/me`,config);
+      const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/users/me/`,config);
 
       if(res.status === 200){
         dispatch({
@@ -240,7 +227,7 @@ export const check_authenticated =()=> async dispatch => {
           token: localStorage.getItem('access')
         })
         try{
-          const res =  await axios.post(`${process.env.REACT_APP_API_URL}/auth/jwt/verify`, body,config);
+          const res =  await axios.post(`${process.env.REACT_APP_API_URL}/auth/jwt/verify/`, body,config);
           if(res.status === 200){
             dispatch({
               type:AUTHENTICATED_SUCCESS
@@ -364,7 +351,6 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
    });
 
    if(new_password !== re_new_password){
-    console.log('Las contraseña NO coincide...')
        dispatch({
         type:RESET_PASSWORD_CONFIRM_FAIL
        });
@@ -374,7 +360,6 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
        dispatch(setAlert('Passwords do not match', 'red'))
    }else{
     try{
-      console.log('Las contraseña SI coincide...')
       const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/users/reset_password_confirm/`, body,config)
 
       if(res.status === 204){
@@ -395,7 +380,6 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
          dispatch(setAlert('Error resetting your password', 'red'));
        }
     }catch(e){
-      console.log(e);
       console.error(e.response?.data); // Esto ayudará a ver detalles del error
       dispatch({
         type: RESET_PASSWORD_CONFIRM_FAIL
@@ -408,3 +392,64 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
    }
 }
 
+export const continue_with_google = () => async dispatch => {
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${window.location.origin}${window.location.pathname}`);
+    localStorage.setItem('social_provider', 'google-oauth2');
+    window.location.replace(res.data.authorization_url);
+  } catch(e) {
+    dispatch(setAlert('Error al conectar con Google', 'red'));
+  }
+}
+
+export const continue_with_github = () => async dispatch => {
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/github/?redirect_uri=${window.location.origin}${window.location.pathname}`);
+    localStorage.setItem('social_provider', 'github');
+    window.location.replace(res.data.authorization_url);
+  } catch(e) {
+    dispatch(setAlert('Error al conectar con GitHub', 'red'));
+  }
+}
+
+export const social_authenticate = (state, code, provider) => async dispatch => {
+  dispatch({ type: SET_AUTH_LOADING });
+  
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    withCredentials: true
+  };
+  
+  const details = {
+    'state': state,
+    'code': code,
+    'redirect_uri': window.location.origin + window.location.pathname
+  };
+
+  const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+
+  try {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/o/${provider}/?state=${state}`, formBody, config);
+
+    if (res.status === 201 || res.status === 200) {
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data
+      });
+      dispatch(load_user());
+      dispatch({ type: REMOVE_AUTH_LOADING });
+      dispatch(setAlert('Inicio de sesión exitoso', 'green'));
+    } else {
+      dispatch({ type: LOGIN_FAIL });
+      dispatch({ type: REMOVE_AUTH_LOADING });
+      dispatch(setAlert('Error al iniciar sesión', 'red'));
+    }
+  } catch (err) {
+    console.error("SOCIAL AUTH ERROR: ", err.response?.data || err.message);
+    dispatch({ type: LOGIN_FAIL });
+    dispatch({ type: REMOVE_AUTH_LOADING });
+    dispatch(setAlert('Error al autenticar. Revisa tus credenciales', 'red'));
+  }
+};

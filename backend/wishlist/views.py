@@ -9,17 +9,19 @@ from product.serializers import ProductSerializer
 class GetItemsView(APIView):
     def get(self, request, format=None):
         user = self.request.user
+        if not user.is_authenticated:
+            return Response({'wishlist': []}, status=status.HTTP_200_OK)
 
         try:
-            wishlist = WishList.objects.get(user=user)
-            wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
+            wishlist, created = WishList.objects.get_or_create(user=user)
+            wishlist_items = WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist)
             result = []
 
-            if WishListItem.objects.filter(wishlist=wishlist).exists():
+            if WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist).exists():
                 for wishlist_item in wishlist_items:
                     item = {}
                     item['id'] = wishlist_item.id
-                    product = Product.objects.get(id=wishlist_item.product.id)
+                    product = wishlist_item.product
                     product = ProductSerializer(product)
                     item['product'] = product.data
                     result.append(item)
@@ -55,7 +57,7 @@ class AddItemView(APIView):
                 )
 
             product = Product.objects.get(id=product_id)
-            wishlist = WishList.objects.get(user=user)
+            wishlist, created = WishList.objects.get_or_create(user=user)
 
             if WishListItem.objects.filter(wishlist=wishlist, product=product).exists():
                 return Response(
@@ -89,14 +91,14 @@ class AddItemView(APIView):
                             total_items=total_items
                         )
 
-            wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
+            wishlist_items = WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist)
             result = []
 
             for wishlist_item in wishlist_items:
                 item = {}
 
                 item['id'] = wishlist_item.id
-                product = Product.objects.get(id=wishlist_item.product.id)
+                product = wishlist_item.product
                 product = ProductSerializer(product)
 
                 item['product'] = product.data
@@ -119,8 +121,11 @@ class GetItemTotalView(APIView):
     def get(self, request, format=None):
         user = self.request.user
 
+        if not user.is_authenticated:
+            return Response({'total_items': 0}, status=status.HTTP_200_OK)
+
         try:
-            wishlist = WishList.objects.get(user=user)
+            wishlist, created = WishList.objects.get_or_create(user=user)
             total_items = wishlist.total_items
 
             return Response(
@@ -139,6 +144,9 @@ class RemoveItemView(APIView):
         user = self.request.user
         data = self.request.data
 
+        if not user.is_authenticated:
+            return Response({'wishlist': []}, status=status.HTTP_200_OK)
+
         try:
             product_id = int(data['product_id'])
         except:
@@ -148,7 +156,7 @@ class RemoveItemView(APIView):
             )
 
         try:
-            wishlist = WishList.objects.get(user=user)
+            wishlist, created = WishList.objects.get_or_create(user=user)
             if not Product.objects.filter(id=product_id).exists():
                 return Response(
                     {'error': 'Product with this ID does not exist'},
@@ -172,16 +180,16 @@ class RemoveItemView(APIView):
                     total_items=total_items
                 )
             
-            wishlist_items = WishListItem.objects.filter(wishlist=wishlist)
+            wishlist_items = WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist)
 
             result = []
 
-            if WishListItem.objects.filter(wishlist=wishlist).exists():
+            if WishListItem.objects.select_related('product', 'product__category').filter(wishlist=wishlist).exists():
                 for wishlist_item in wishlist_items:
                     item = {}
 
                     item['id'] = wishlist_item.id
-                    product = Product.objects.get(id=wishlist_item.product.id)
+                    product = wishlist_item.product
                     product = ProductSerializer(product)
 
                     item['product'] = product.data

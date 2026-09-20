@@ -51,8 +51,7 @@ export const get_products_by_arrival = () => async dispatch => {
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/get-products?sortBy=date_created&order=desc&limit=3`, config);
-        console.log("products arrival  ", res.data) 
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/get-products?sortBy=date_created&order=desc&limit=12`, config);
         if (res.status === 200) {
             dispatch({
                 type: GET_PRODUCTS_BY_ARRIVAL_SUCCESS,
@@ -78,7 +77,7 @@ export const get_products_by_sold = () => async dispatch => {
     };
 
     try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/get-products?sortBy=sold&order=desc&limit=3`, config);
+        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/product/get-products?sortBy=sold&order=desc&limit=12`, config);
 
         if (res.status === 200) {
             dispatch({

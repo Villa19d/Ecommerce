@@ -13,9 +13,7 @@ export const get_categories = ()=> async dispatch => {
     };
 
     try{
-        console.log('obtenemos categorias');
         const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/category/categories`,config);
-        console.log(res)
         if(res.status === 200){
             dispatch({
                 type:GET_CATEGORIES_SUCCESS,
@@ -27,7 +25,6 @@ export const get_categories = ()=> async dispatch => {
            }); 
         }
     } catch(e){
-        console.log(e, 'error en categories');
       console.error(e.response?.data);
         dispatch({
             type:GET_CATEGORIES_FAIL

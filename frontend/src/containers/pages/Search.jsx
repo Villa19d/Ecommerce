@@ -16,15 +16,13 @@ const sortOptions = [
   { name: 'Best Rating', href: '#', current: false },
   { name: 'Newest', href: '#', current: false },
   { name: 'Price: Low to High', href: '#', current: false },
-  { name: 'Price: High to Low', href: '#', current: false },
-]
+  { name: 'Price: High to Low', href: '#', current: false }]
 const subCategories = [
   { name: 'Totes', href: '#' },
   { name: 'Backpacks', href: '#' },
   { name: 'Travel Bags', href: '#' },
   { name: 'Hip Bags', href: '#' },
-  { name: 'Laptop Sleeves', href: '#' },
-]
+  { name: 'Laptop Sleeves', href: '#' }]
 const filters = [
   {
     id: 'color',
@@ -35,8 +33,7 @@ const filters = [
       { value: 'blue', label: 'Blue', checked: true },
       { value: 'brown', label: 'Brown', checked: false },
       { value: 'green', label: 'Green', checked: false },
-      { value: 'purple', label: 'Purple', checked: false },
-    ],
+      { value: 'purple', label: 'Purple', checked: false }],
   },
   {
     id: 'category',
@@ -46,8 +43,7 @@ const filters = [
       { value: 'sale', label: 'Sale', checked: false },
       { value: 'travel', label: 'Travel', checked: true },
       { value: 'organization', label: 'Organization', checked: false },
-      { value: 'accessories', label: 'Accessories', checked: false },
-    ],
+      { value: 'accessories', label: 'Accessories', checked: false }],
   },
   {
     id: 'size',
@@ -58,10 +54,8 @@ const filters = [
       { value: '12l', label: '12L', checked: false },
       { value: '18l', label: '18L', checked: false },
       { value: '20l', label: '20L', checked: false },
-      { value: '40l', label: '40L', checked: true },
-    ],
-  },
-]
+      { value: '40l', label: '40L', checked: true }],
+  }]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -96,7 +90,7 @@ const Search = ({
         get_categories()
         get_products()
         window.scrollTo(0,0)
-    }, [])
+    }, [get_products, get_categories])
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value})
 
@@ -156,7 +150,7 @@ const Search = ({
     return (
         <div>
             <Navbar/>
-            <div className="bg-white">
+            <div className="bg-slate-50 dark:bg-slate-800 transition-colors duration-300">
       <div>
         {/* Mobile filter dialog */}
         <Transition.Root show={mobileFiltersOpen} as={Fragment}>
@@ -182,12 +176,12 @@ const Search = ({
               leaveFrom="translate-x-0"
               leaveTo="translate-x-full"
             >
-              <div className="ml-auto relative max-w-xs w-full h-full bg-white shadow-xl py-4 pb-12 flex flex-col overflow-y-auto">
+              <div className="ml-auto relative max-w-xs w-full h-full bg-white dark:bg-slate-900 shadow-xl py-4 pb-12 flex flex-col overflow-y-auto transition-colors duration-300">
                 <div className="px-4 flex items-center justify-between">
-                  <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+                  <h2 className="text-lg font-medium text-gray-900 dark:text-slate-100">Filtros</h2>
                   <button
                     type="button"
-                    className="-mr-2 w-10 h-10 bg-white p-2 rounded-md flex items-center justify-center text-gray-400"
+                    className="-mr-2 w-10 h-10 bg-white dark:bg-slate-800 p-2 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-slate-700 transition-colors duration-300"
                     onClick={() => setMobileFiltersOpen(false)}
                   >
                     <span className="sr-only">Close menu</span>
@@ -196,9 +190,9 @@ const Search = ({
                 </div>
 
                 {/* MOBILE FILTERS */}
-                <form onSubmit={e => onSubmit(e)} className="mt-4 border-t border-gray-200">
+                <form onSubmit={e => onSubmit(e)} className="mt-4 border-t border-gray-200 dark:border-slate-700">
                   <h3 className="sr-only">Categories</h3>
-                  <ul role="list" className="font-medium text-gray-900 px-2 py-3">
+                  <ul role="list" className="font-medium text-gray-900 dark:text-slate-100 px-2 py-3">
                     {
                         categories &&
                         categories !== null &&
@@ -214,7 +208,7 @@ const Search = ({
                                             type='radio'
                                             className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                         />
-                                        <label className="ml-3 min-w-0 flex-1 text-gray-500">
+                                        <label className="ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                             {category.name}
                                         </label>
                                     </div>
@@ -230,7 +224,7 @@ const Search = ({
                                             type='radio'
                                             className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                         />
-                                        <label className="ml-3 min-w-0 flex-1 text-gray-500">
+                                        <label className="ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                             {category.name}
                                         </label>
                                     </div>
@@ -246,7 +240,7 @@ const Search = ({
                                                 type='radio'
                                                 className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                             />
-                                            <label className="ml-3 min-w-0 flex-1 text-gray-500">
+                                            <label className="ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                                 {sub_category.name}
                                             </label>
                                         </div>
@@ -259,12 +253,12 @@ const Search = ({
                     }
                   </ul>
 
-                  <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
+                  <Disclosure as="div" className="border-t border-gray-200 dark:border-slate-700 px-4 py-6">
                   {({ open }) => (
                     <>
                     <h3 className="-mx-2 -my-3 flow-root">
-                      <Disclosure.Button className="px-2 py-3 bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
-                        <span className="font-sofiapro-regular text-gray-900">Prices</span>
+                      <Disclosure.Button className="px-2 py-3 bg-transparent w-full flex items-center justify-between text-gray-400 hover:text-gray-500 dark:hover:text-slate-300 transition-colors duration-300">
+                        <span className="font-sofiapro-regular text-gray-900 dark:text-slate-100">Prices</span>
                         <span className="ml-6 flex items-center">
                           {open ? (
                             <MinusSmIcon className="h-5 w-5" aria-hidden="true" />
@@ -288,7 +282,7 @@ const Search = ({
                                                   className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                                   defaultChecked
                                               />
-                                              <label className='ml-3 min-w-0 flex-1 text-gray-500 font-sofiapro-light'>{price.name}</label>
+                                              <label className='ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 font-sofiapro-light cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors'>{price.name}</label>
                                           </div>
                                       )
                                   } else {
@@ -301,7 +295,7 @@ const Search = ({
                                                   type='radio'
                                                   className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                               />
-                                              <label className='ml-3 min-w-0 flex-1 text-gray-500 font-sofiapro-light'>{price.name}</label>
+                                              <label className='ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 font-sofiapro-light cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors'>{price.name}</label>
                                           </div>
                                       )
                                   }
@@ -317,12 +311,12 @@ const Search = ({
                   )}
                   </Disclosure>
 
-                  <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
+                  <Disclosure as="div" className="border-t border-gray-200 dark:border-slate-700 px-4 py-6">
                   {({ open }) => (
                     <>
                     <h3 className="-mx-2 -my-3 flow-root">
-                      <Disclosure.Button className="px-2 py-3 bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
-                        <span className="font-sofiapro-regular text-gray-900">Mas Filtros</span>
+                      <Disclosure.Button className="px-2 py-3 bg-transparent w-full flex items-center justify-between text-gray-400 hover:text-gray-500 dark:hover:text-slate-300 transition-colors duration-300">
+                        <span className="font-sofiapro-regular text-gray-900 dark:text-slate-100">Mas Filtros</span>
                         <span className="ml-6 flex items-center">
                           {open ? (
                             <MinusSmIcon className="h-5 w-5" aria-hidden="true" />
@@ -334,10 +328,10 @@ const Search = ({
                       <Disclosure.Panel className="pt-6">
                         <div className="space-y-6">
                           <div className='form-group '>
-                              <label htmlFor='sortBy' className='mr-3 min-w-0 flex-1 text-gray-500'
+                              <label htmlFor='sortBy' className='mr-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 font-medium'
                               >Ver por</label>
                                 <select
-                                    className='my-2 font-sofiapro-light inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500'
+                                    className='my-2 font-sofiapro-light inline-flex justify-center w-full rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-indigo-500 transition-colors duration-300 cursor-pointer'
                                     id='sortBy'
                                     name='sortBy'
                                     onChange={e => onChange(e)}
@@ -351,10 +345,10 @@ const Search = ({
                                 </select>
                           </div>
                           <div className='form-group'>
-                              <label htmlFor='order' className='mr-3 min-w-0 flex-1 text-gray-500'
+                              <label htmlFor='order' className='mr-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 font-medium'
                               >Orden</label>
                               <select
-                                  className='my-2 font-sofiapro-light inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500'
+                                  className='my-2 font-sofiapro-light inline-flex justify-center w-full rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-indigo-500 transition-colors duration-300 cursor-pointer'
                                   id='order'
                                   name='order'
                                   onChange={e => onChange(e)}
@@ -373,7 +367,7 @@ const Search = ({
 
                   <button
         type="submit"
-        className="float-right inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        className="w-full mt-4 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-colors duration-300"
       >
         Buscar
       </button>
@@ -386,8 +380,8 @@ const Search = ({
         </Transition.Root>
 
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200">
-            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900">Productos 
+          <div className="relative z-10 flex items-baseline justify-between pt-24 pb-6 border-b border-gray-200 dark:border-slate-800">
+            <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white">Productos 
              ({searched_products &&
                 searched_products !== null &&
                 searched_products !== undefined &&
@@ -414,7 +408,7 @@ const Search = ({
               {/* Filters */}
               <form onSubmit={e=>onSubmit(e)} className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                <ul role="list" className="text-sm font-medium text-gray-900 space-y-4 pb-6 border-b border-gray-200">
+                <ul role="list" className="text-sm font-medium text-gray-900 space-y-4 pb-6 border-b border-gray-200 dark:border-slate-700">
                 {
                         categories &&
                         categories !== null &&
@@ -428,7 +422,7 @@ const Search = ({
                                             type='radio'
                                             className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                         />
-                                        <label className="ml-3 min-w-0 flex-1 text-gray-500">
+                                        <label className="ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                             {category.name}
                                         </label>
                                     </div>
@@ -442,7 +436,7 @@ const Search = ({
                                             type='radio'
                                             className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                         />
-                                        <label className="ml-3 min-w-0 flex-1 text-gray-500">
+                                        <label className="ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                             {category.name}
                                         </label>
                                     </div>
@@ -456,7 +450,7 @@ const Search = ({
                                                 type='radio'
                                                 className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                             />
-                                            <label className="ml-3 min-w-0 flex-1 text-gray-500">
+                                            <label className="ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors">
                                                 {sub_category.name}
                                             </label>
                                         </div>
@@ -469,12 +463,12 @@ const Search = ({
                     }
                 </ul>
 
-                <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
+                <Disclosure as="div" className="border-t border-gray-200 dark:border-slate-700 px-4 py-6">
                   {({ open }) => (
                     <>
                     <h3 className="-mx-2 -my-3 flow-root">
-                      <Disclosure.Button className="px-2 py-3 bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
-                        <span className="font-sofiapro-regular text-gray-900">Prices</span>
+                      <Disclosure.Button className="px-2 py-3 bg-transparent w-full flex items-center justify-between text-gray-400 hover:text-gray-500 dark:hover:text-slate-300 transition-colors duration-300">
+                        <span className="font-sofiapro-regular text-gray-900 dark:text-slate-100">Prices</span>
                         <span className="ml-6 flex items-center">
                           {open ? (
                             <MinusSmIcon className="h-5 w-5" aria-hidden="true" />
@@ -498,7 +492,7 @@ const Search = ({
                                                   className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                                   defaultChecked
                                               />
-                                              <label className='ml-3 min-w-0 flex-1 text-gray-500 font-sofiapro-light'>{price.name}</label>
+                                              <label className='ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 font-sofiapro-light cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors'>{price.name}</label>
                                           </div>
                                       )
                                   } else {
@@ -511,7 +505,7 @@ const Search = ({
                                                   type='radio'
                                                   className='focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300 rounded-full'
                                               />
-                                              <label className='ml-3 min-w-0 flex-1 text-gray-500 font-sofiapro-light'>{price.name}</label>
+                                              <label className='ml-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 font-sofiapro-light cursor-pointer hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors'>{price.name}</label>
                                           </div>
                                       )
                                   }
@@ -527,12 +521,12 @@ const Search = ({
                   )}
                   </Disclosure>
 
-                  <Disclosure as="div" className="border-t border-gray-200 px-4 py-6">
+                  <Disclosure as="div" className="border-t border-gray-200 dark:border-slate-700 px-4 py-6">
                   {({ open }) => (
                     <>
                     <h3 className="-mx-2 -my-3 flow-root">
-                      <Disclosure.Button className="px-2 py-3 bg-white w-full flex items-center justify-between text-gray-400 hover:text-gray-500">
-                        <span className="font-sofiapro-regular text-gray-900">Mas Filtros</span>
+                      <Disclosure.Button className="px-2 py-3 bg-transparent w-full flex items-center justify-between text-gray-400 hover:text-gray-500 dark:hover:text-slate-300 transition-colors duration-300">
+                        <span className="font-sofiapro-regular text-gray-900 dark:text-slate-100">Mas Filtros</span>
                         <span className="ml-6 flex items-center">
                           {open ? (
                             <MinusSmIcon className="h-5 w-5" aria-hidden="true" />
@@ -544,10 +538,10 @@ const Search = ({
                       <Disclosure.Panel className="pt-6">
                         <div className="space-y-6">
                           <div className='form-group '>
-                              <label htmlFor='sortBy' className='mr-3 min-w-0 flex-1 text-gray-500'
+                              <label htmlFor='sortBy' className='mr-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 font-medium'
                               >Ver por</label>
                                 <select
-                                    className='my-2 font-sofiapro-light inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500'
+                                    className='my-2 font-sofiapro-light inline-flex justify-center w-full rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-indigo-500 transition-colors duration-300 cursor-pointer'
                                     id='sortBy'
                                     name='sortBy'
                                     onChange={e => onChange(e)}
@@ -561,10 +555,10 @@ const Search = ({
                                 </select>
                           </div>
                           <div className='form-group'>
-                              <label htmlFor='order' className='mr-3 min-w-0 flex-1 text-gray-500'
+                              <label htmlFor='order' className='mr-3 min-w-0 flex-1 text-gray-500 dark:text-slate-400 font-medium'
                               >Orden</label>
                               <select
-                                  className='my-2 font-sofiapro-light inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-100 focus:ring-blue-500'
+                                  className='my-2 font-sofiapro-light inline-flex justify-center w-full rounded-md border border-gray-300 dark:border-slate-600 shadow-sm px-4 py-2 bg-transparent text-sm font-medium text-gray-700 dark:text-slate-300 hover:bg-gray-50 dark:hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-100 dark:focus:ring-offset-slate-900 focus:ring-indigo-500 transition-colors duration-300 cursor-pointer'
                                   id='order'
                                   name='order'
                                   onChange={e => onChange(e)}
@@ -583,7 +577,7 @@ const Search = ({
 
                   <button
                     type="submit"
-                    className="float-right inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                    className="w-full mt-4 inline-flex justify-center items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900 transition-colors duration-300"
                   >
                     Buscar
                   </button>
@@ -618,3 +612,4 @@ export default connect(mapStateToProps,{
     get_products,
     get_filtered_products
 }) (Search)
+// Cache bust 1

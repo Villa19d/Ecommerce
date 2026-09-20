@@ -11,9 +11,9 @@ const ThankYou = ({
 
     useEffect(() => {
         reset()
-    }, [])
+    }, [reset])
 
-    if(!isAuthenticated)
+    if(isAuthenticated === false)
         return <Navigate to='/' />;
 
     return(

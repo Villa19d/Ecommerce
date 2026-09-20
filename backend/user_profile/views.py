@@ -64,7 +64,7 @@ class UpdateUserProfileView(APIView):
             if photo:
                 defaults['photo'] = photo
 
-            UserProfile.objects.update_or_create(
+            user_profile, created = UserProfile.objects.update_or_create(
                 user=user,
                 defaults=defaults
             )
@@ -75,7 +75,6 @@ class UpdateUserProfileView(APIView):
                 user.last_name = last_name
             user.save()
 
-            user_profile = UserProfile.objects.get(user=user)
             user_profile = UserProfileSerializer(user_profile)
             profile_data = user_profile.data
             profile_data['first_name'] = user.first_name

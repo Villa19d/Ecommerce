@@ -34,6 +34,8 @@ class UserAccount(AbstractBaseUser,PermissionsMixin):
     email = models.EmailField(max_length=255,unique=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
+    
+    photo = models.ImageField(upload_to='users/photos/', blank=True, null=True)
 
     objects = UserAccountManager()
 

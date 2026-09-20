@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { setAlert } from './Alert';
 import {
     ADD_ITEM,
     GET_TOTAL,
@@ -26,7 +27,17 @@ import {
 } from './types';
 
 
-export const add_item = product => async dispatch => {
+export const add_item = product => async (dispatch, getState) => {
+    const state = getState();
+    const currentItems = state.Cart?.items || [];
+    const itemExists = currentItems.find(item => item.product.id.toString() === product.id.toString());
+    
+    // Si no existe, al agregarlo sumaría 1 al tamaño actual del carrito
+    if (!itemExists && currentItems.length >= 20) {
+        dispatch(setAlert('El límite del carrito es de 20 artículos', 'red'));
+        return;
+    }
+
     if (localStorage.getItem('access')) {
         const config = {
             headers: {

@@ -1,4 +1,3 @@
-import { refresh } from '../Actions/auth.js';
 import {
     SIGNUP_SUCCESS,
     SIGNUP_FAIL,
@@ -56,13 +55,11 @@ export default function Auth(state = initialState, action){
             user:null
         }
     case AUTHENTICATED_SUCCESS:
-        console.log('case Autenticado a True')
         return{
             ...state,
             isAuthenticated: true
         }       
     case AUTHENTICATED_FAIL:
-        console.log('case Authenticated fail')
         localStorage.removeItem('access');
         localStorage.removeItem('refresh');
         return{
@@ -72,7 +69,6 @@ export default function Auth(state = initialState, action){
             refresh:null
         }    
     case LOGIN_SUCCESS:
-        console.log('Case Login_success---->', payload.access)
         localStorage.setItem('access', payload.access);
         localStorage.setItem('refresh', payload.refresh);
         return{
@@ -89,7 +85,6 @@ export default function Auth(state = initialState, action){
     case RESET_PASSWORD_CONFIRM_FAIL:         
       return {...state}  
     case REFRESH_SUCCESS:
-        console.log('Refresh success')
         localStorage.setItem('access', payload.access);
         return{
             ...state,
@@ -100,7 +95,6 @@ export default function Auth(state = initialState, action){
     case LOGIN_FAIL: 
     case REFRESH_FAIL:
     case LOGOUT:    
-        console.log('Refresh fail')
         localStorage.removeItem('access')
         localStorage.removeItem('refresh')
     return{

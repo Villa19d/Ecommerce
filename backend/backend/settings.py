@@ -239,7 +239,7 @@ REST_FRAMEWORK = {
 }
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.google.GoogleOAuth2',
+    'user.backends.StatelessGoogleOAuth2',
     'social_core.backends.facebook.FacebookOAuth2',
     'django.contrib.auth.backends.ModelBackend',
 )
@@ -266,12 +266,19 @@ DJOSER = {
     'SET_USERNAME_RETYPE': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',
     'SET_PASSWORD_RETYPE': True,
-'PASSWORD_RESET_CONFIRM_RETYPE': True,
+    'PASSWORD_RESET_CONFIRM_RETYPE': True,
     'USERNAME_RESET_CONFIRM_URL': 'email/reset/confirm/{uid}/{token}',
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
-    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': ['http://localhost:8000/google', 'http://localhost:8000/facebook'],
+    'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [
+        'http://localhost:3000/login', 
+        'http://localhost:3000/signup',
+        'http://127.0.0.1:3000/login',
+        'http://127.0.0.1:3000/signup',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000'
+    ],
     'SERIALIZERS': {
         'user_create': 'user.serializers.UserCreateSerializer',
         'user': 'user.serializers.UserCreateSerializer',
@@ -288,18 +295,19 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #/****************************CONECTAR EMAILS*********************************************************************/
-AUTH_USER_MODEL = "user.UserAccount"
+AUTH_USER_MODEL = 'user.UserAccount' #Le decimos a Django que el modelo de usuario que vamos a usar es el que acabamos de crear
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Domain for Djoser emails
+DOMAIN = '127.0.0.1:3000'
+SITE_NAME = 'NitroStore'
 
-if not DEBUG:
-    DEFAULT_FROM_EMAIL = 'Rodrigo <luisrodrigo1005@gmail.com>'
-    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-    EMAIL_HOST = env('EMAIL_HOST')
-    EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-    EMAIL_PORT = env('EMAIL_PORT')
-    EMAIL_USE_TLS = env('EMAIL_USE_TLS')
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER', default='luisrodrigo1005@gmail.com')
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
+EMAIL_PORT = env('EMAIL_PORT', default=587)
+EMAIL_USE_TLS = env('EMAIL_USE_TLS', default=True)
 
 
 # Se agrega esta linea en desarrollo para desactivar CSRF, luego se borra en producción
@@ -314,5 +322,33 @@ CORS_ALLOW_HEADERS = [
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "http://127.0.0.1:3000",
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_CREDENTIALS = True
+
+
+# Autenticacin Social (OAuth)
+AUTHENTICATION_BACKENDS = (
+    'user.backends.StatelessGoogleOAuth2',
+    'user.backends.StatelessGithubOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('GOOGLE_CLIENT_ID', default='')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('GOOGLE_CLIENT_SECRET', default='')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+]
+
+SOCIAL_AUTH_GITHUB_KEY = env('GITHUB_CLIENT_ID', default='')
+SOCIAL_AUTH_GITHUB_SECRET = env('GITHUB_CLIENT_SECRET', default='')
+SOCIAL_AUTH_GITHUB_SCOPE = ['user:email']
+
+# Deshabilitar validacin de estado por sesin
+SOCIAL_AUTH_GOOGLE_OAUTH2_STATE_PARAMETER = False
+SOCIAL_AUTH_GITHUB_STATE_PARAMETER = False
+
+# Custom Redirect URIs for Stateless OAuth
+SOCIAL_AUTH_GITHUB_REDIRECT_URI = env('FRONTEND_URL', default='http://localhost:3000') + '/login'
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = env('FRONTEND_URL', default='http://localhost:3000') + '/login'
