@@ -12,6 +12,7 @@ import { logout } from '../../Redux/Actions/auth';
 import Logo from '../navigation/Logo';
 import Footer from '../navigation/Footer';
 import { MoonIcon, SunIcon } from '@heroicons/react/solid';
+import InteractiveBackground from '../animations/InteractiveBackground';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -51,7 +52,7 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
   ]
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300 flex flex-col">
+    <InteractiveBackground>
       {/* Sidebar para móviles */}
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 flex z-40 md:hidden" onClose={setSidebarOpen}>
@@ -75,7 +76,7 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
             leaveFrom="translate-x-0"
             leaveTo="-translate-x-full"
           >
-            <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 transition-colors">
+            <div className="relative flex-1 flex flex-col max-w-xs w-full pt-5 pb-4 bg-white/90 dark:bg-slate-800/90 backdrop-blur-xl border-r border-slate-200 dark:border-slate-700 transition-colors">
               <Transition.Child
                 as={Fragment}
                 enter="ease-in-out duration-300"
@@ -118,7 +119,7 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
       <div className="flex-1 flex flex-col md:flex-row relative">
         {/* Sidebar estático para escritorio */}
         <div className="hidden md:flex md:w-64 md:flex-col flex-shrink-0">
-          <div className="flex flex-col flex-grow border-r border-slate-200 dark:border-slate-800 pt-5 bg-white dark:bg-slate-900 transition-colors sticky top-0 h-screen overflow-y-auto">
+          <div className="flex flex-col flex-grow border-r border-slate-200 dark:border-slate-800 pt-5 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md transition-colors sticky top-0 h-screen overflow-y-auto">
             <div className="flex items-center flex-shrink-0 px-4 mt-2">
               <Link to="/" className="flex items-center focus:outline-none">
                   <Logo className="h-10 w-auto" />
@@ -134,7 +135,7 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
 
         {/* Main Column */}
         <div className="flex-1 flex flex-col min-w-0">
-        <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
+        <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white/80 dark:bg-slate-900/80 backdrop-blur-md border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
           <button
             type="button"
             className="px-4 border-r border-slate-200 dark:border-slate-800 text-slate-500 dark:text-slate-400 focus:outline-none md:hidden"
@@ -241,7 +242,7 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
       
       {/* FOOTER */}
       <Footer />
-    </div>
+    </InteractiveBackground>
   )
 }
 

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import logo from '../../assets/logo.svg';
-
+import Logo from './Logo';
 function Footer() {
   return (
     <footer className="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 transition-colors duration-300 mt-auto">
@@ -11,11 +10,7 @@ function Footer() {
           {/* 1. Sobre el Proyecto */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center space-x-2">
-              <img
-                className="h-10 w-auto"
-                src={logo}
-                alt="Logo"
-              />
+              <Logo className="h-10 w-auto" />
             </Link>
             <p className="text-sm text-slate-500 dark:text-slate-400">
               Tu tienda de tecnología y estilo favorita, desarrollada con altos estándares de rendimiento y seguridad.

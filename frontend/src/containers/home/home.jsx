@@ -10,7 +10,6 @@ import Banner from '../../components/home/Banner'
 import ProductsArrival from '../../components/home/ProductsArrival'
 import ProductsSold from '../../components/home/ProductsSold'
 import FadeInScroll from '../../components/animations/FadeInScroll'
-import InteractiveDarkBackground from '../../components/animations/InteractiveDarkBackground'
 
 const Home = ({ 
     get_products_by_arrival, 
@@ -27,18 +26,16 @@ const Home = ({
 
     return(
         <Layout>
-            <InteractiveDarkBackground>
-                <Banner/>
-                <div className="py-16 space-y-16">
-                    <FadeInScroll>
-                        <ProductsArrival data={products_arrival}/>
-                    </FadeInScroll>
-                    
-                    <FadeInScroll>
-                        <ProductsSold data={products_sold}/>
-                    </FadeInScroll>
-                </div>
-            </InteractiveDarkBackground>
+            <Banner/>
+            <div className="py-16 space-y-16">
+                <FadeInScroll>
+                    <ProductsArrival data={products_arrival}/>
+                </FadeInScroll>
+                
+                <FadeInScroll>
+                    <ProductsSold data={products_sold}/>
+                </FadeInScroll>
+            </div>
         </Layout>
     )
 }

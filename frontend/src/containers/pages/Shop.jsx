@@ -152,7 +152,7 @@ const Shop = ({
 
   return (
     <Layout>
-      <div className="bg-slate-50 dark:bg-slate-800 transition-colors duration-300">
+      <div className="bg-transparent transition-colors duration-300">
         <div>
           {/* Mobile filter dialog */}
           <Transition.Root show={mobileFiltersOpen} as={Fragment}>

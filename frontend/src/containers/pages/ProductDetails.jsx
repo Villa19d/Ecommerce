@@ -186,7 +186,7 @@ const ProductDetails =({
 
     return(
         <Layout>
-            <div className="bg-slate-50 dark:bg-slate-900 min-h-screen pb-20 transition-colors duration-300">
+            <div className="bg-transparent min-h-screen pb-20 transition-colors duration-300">
                 {/* Contenedor Principal */}
                 <div className="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-xl overflow-hidden border border-slate-100 dark:border-slate-700">

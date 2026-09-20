@@ -51,15 +51,15 @@ const ResetPasswordConfirm =({reset_password_confirm
             src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
             alt="Workflow"
           />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">Set you new password :)</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">Set you new password :)</h2>
           
         </div>
 
         <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
-          <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-md py-8 px-4 shadow sm:rounded-lg sm:px-10 border border-slate-100 dark:border-slate-700">
             <form onSubmit={e=>onSubmit(e)} className="space-y-6">
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-slate-300">
                   Password
                 </label>
                 <div className="mt-1">
@@ -76,7 +76,7 @@ const ResetPasswordConfirm =({reset_password_confirm
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-700">
+                <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-slate-300">
                   Confirm Password
                 </label>
                 <div className="mt-1">

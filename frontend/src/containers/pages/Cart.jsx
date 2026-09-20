@@ -156,7 +156,7 @@ const Cart = ({
 
     return (
         <Layout>
-            <div className="bg-white dark:bg-slate-900 transition-colors duration-300">
+            <div className="bg-transparent transition-colors duration-300">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Shopping Cart Items ({total_items})</h1>
         <div className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">

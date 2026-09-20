@@ -4,7 +4,6 @@ import {useState,useEffect} from 'react'
 import {connect} from 'react-redux';
 import {signup} from '../../Redux/Actions/auth.js';
 
-
  const Signup=({
     signup
  })=>{
@@ -51,14 +50,11 @@ const onSubmit = e=>{
 }
     return(
         <Layout>
-     <section class="bg-white dark:bg-gray-900">
+     <section class="bg-transparent">
     <div class="container flex items-center justify-center min-h-screen px-6 mx-auto">
         <form 
         onSubmit={e=>onSubmit(e)}
         class="w-full max-w-md">
-            <div class="flex justify-center mx-auto">
-                <img class="w-auto h-7 sm:h-8" src="https://merakiui.com/images/logo.svg" alt=""/>
-            </div>
             
             <div class="flex items-center justify-center mt-6 ">
 
@@ -78,7 +74,7 @@ const onSubmit = e=>{
                     </svg>
                 </span>
 
-                <input type="text" class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" 
+                <input type="text" class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-slate-800 dark:text-white dark:border-slate-700 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="First Name"
                 name="first_name"
                 value={first_name}
@@ -91,7 +87,7 @@ const onSubmit = e=>{
                    <FontAwesomeIcon class="w-6 h-6 mx-3" icon="fa-solid fa-id-card" style={{color: "#6b7280",}} />
                 </span>
 
-                <input type="text" class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" 
+                <input type="text" class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-slate-800 dark:text-white dark:border-slate-700 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Last Name"
                 name="last_name"
                 value={last_name}
@@ -106,7 +102,7 @@ const onSubmit = e=>{
                     </svg>
                 </span>
 
-                <input type="email" class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
+                <input type="email" class="block w-full py-3 text-gray-700 bg-white border rounded-lg px-11 dark:bg-slate-800 dark:text-white dark:border-slate-700 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                  placeholder="Email address"
                  name="email"
                  value={email}
@@ -121,7 +117,7 @@ const onSubmit = e=>{
                     </svg>
                 </span>
 
-                <input type="password" class="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" 
+                <input type="password" class="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-slate-800 dark:text-white dark:border-slate-700 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Password"
                 name="password"
                 value={password}
@@ -136,7 +132,7 @@ const onSubmit = e=>{
                     </svg>
                 </span>
 
-                <input type="password" class="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-gray-900 dark:text-gray-300 dark:border-gray-600 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40" 
+                <input type="password" class="block w-full px-10 py-3 text-gray-700 bg-white border rounded-lg dark:bg-slate-800 dark:text-white dark:border-slate-700 focus:border-blue-400 dark:focus:border-blue-300 focus:ring-blue-300 focus:outline-none focus:ring focus:ring-opacity-40"
                 placeholder="Confirm Password"
                 name="re_password"
                 value={re_password}
@@ -161,7 +157,7 @@ const onSubmit = e=>{
         </form>
     </div>
 </section>
-<script src="https://kit.fontawesome.com/c4a768dde6.js" crossorigin="anonymous"></script>
+<script src="https://kit.fontawesome.com/c4a768dde6.js" crossOrigin="anonymous"></script>
 </Layout>
     )
 }

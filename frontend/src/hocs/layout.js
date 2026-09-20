@@ -4,6 +4,7 @@ import Navbar  from "../components/navigation/Navbar";
 import {connect} from 'react-redux';
 import  Footer  from "../components/navigation/Footer";
 import { useEffect } from "react";
+import InteractiveBackground from "../components/animations/InteractiveBackground";
 
 import {check_authenticated,load_user,refresh}from '../Redux/Actions/auth'
 import {get_items, get_total, get_item_total} from '../Redux/Actions/cart'
@@ -21,12 +22,12 @@ const Layout = (props)=>{
     props.get_wishlist_item_total();
   },[]);
     return(
-        <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
+        <InteractiveBackground>
           <Navbar/>
           <ToastContainer autoClose={5000}/>
           {props.children}
           <Footer/>
-        </div>
+        </InteractiveBackground>
     )
 }
 
