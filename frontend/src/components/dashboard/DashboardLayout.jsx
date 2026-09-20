@@ -9,7 +9,9 @@ import { connect } from 'react-redux';
 import DashboardLink from './DashboardLink';
 import { get_user_profile } from '../../Redux/Actions/profile';
 import { logout } from '../../Redux/Actions/auth';
-import { ReactComponent as Logo } from '../../assets/logo.svg';
+import Logo from '../navigation/Logo';
+import Footer from '../navigation/Footer';
+import { MoonIcon, SunIcon } from '@heroicons/react/solid';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -17,6 +19,23 @@ function classNames(...classes) {
 
 const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, logout, children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
+
+  const [isDarkMode, setIsDarkMode] = useState(
+    localStorage.getItem('color-theme') === 'dark' ||
+    (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)
+  );
+
+  const toggleDarkMode = () => {
+    if (isDarkMode) {
+      document.documentElement.classList.remove('dark');
+      localStorage.setItem('color-theme', 'light');
+      setIsDarkMode(false);
+    } else {
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('color-theme', 'dark');
+      setIsDarkMode(true);
+    }
+  };
 
   useEffect(() => {
     get_user_profile()
@@ -32,7 +51,7 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
   ]
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-900 transition-colors duration-300 flex flex-col">
       {/* Sidebar para móviles */}
       <Transition.Root show={sidebarOpen} as={Fragment}>
         <Dialog as="div" className="fixed inset-0 flex z-40 md:hidden" onClose={setSidebarOpen}>
@@ -95,30 +114,26 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
         </Dialog>
       </Transition.Root>
 
-      {/* Sidebar estático para escritorio */}
-      <div className="hidden md:flex md:w-64 md:flex-col md:fixed md:inset-y-0">
-        <div className="flex flex-col flex-grow border-r border-slate-200 dark:border-slate-800 pt-5 bg-white dark:bg-slate-900 transition-colors">
-          <div className="flex items-center flex-shrink-0 px-4">
-            <Link
-                to="/"
-                className="inline-flex items-center px-3 py-1.5 border border-slate-300 dark:border-slate-600 shadow-sm text-xs font-medium rounded text-slate-700 dark:text-slate-200 bg-white dark:bg-slate-800 hover:bg-slate-50 dark:hover:bg-slate-700 focus:outline-none transition-colors"
-            >
-                ← Ir a la Tienda
-            </Link>
-          </div>
-          <div className="flex items-center flex-shrink-0 px-4 mt-6">
-            <Logo className="h-8 w-auto" />
-          </div>
-          <div className="mt-8 flex-grow flex flex-col">
-            <nav className="flex-1 px-4 pb-4 space-y-2">
-              <DashboardLink />
-            </nav>
+      {/* Contenedor Flex para Sidebar y Contenido Principal */}
+      <div className="flex-1 flex flex-col md:flex-row relative">
+        {/* Sidebar estático para escritorio */}
+        <div className="hidden md:flex md:w-64 md:flex-col flex-shrink-0">
+          <div className="flex flex-col flex-grow border-r border-slate-200 dark:border-slate-800 pt-5 bg-white dark:bg-slate-900 transition-colors sticky top-0 h-screen overflow-y-auto">
+            <div className="flex items-center flex-shrink-0 px-4 mt-2">
+              <Link to="/" className="flex items-center focus:outline-none">
+                  <Logo className="h-10 w-auto" />
+              </Link>
+            </div>
+            <div className="mt-8 flex-grow flex flex-col">
+              <nav className="flex-1 px-4 pb-4 space-y-2">
+                <DashboardLink />
+              </nav>
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main Column */}
-      <div className="md:pl-64 flex flex-col flex-1">
+        {/* Main Column */}
+        <div className="flex-1 flex flex-col min-w-0">
         <div className="sticky top-0 z-10 flex-shrink-0 flex h-16 bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 shadow-sm transition-colors">
           <button
             type="button"
@@ -131,24 +146,37 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
           <div className="flex-1 px-4 flex justify-between items-center">
             {/* Espaciador para centrar el perfil a la derecha (quitamos la barra de búsqueda inútil) */}
             <div className="flex-1 flex"></div>
-            <div className="ml-4 flex items-center md:ml-6">
+            <div className="ml-4 flex items-center md:ml-6 space-x-4">
               
+              {/* Botón Dark Mode */}
+              <button
+                onClick={toggleDarkMode}
+                aria-label="Toggle Dark Mode"
+                className="p-2 text-slate-400 hover:text-slate-500 dark:hover:text-slate-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-full transition-colors"
+              >
+                {isDarkMode ? (
+                  <SunIcon className="h-6 w-6" aria-hidden="true" />
+                ) : (
+                  <MoonIcon className="h-6 w-6" aria-hidden="true" />
+                )}
+              </button>
+
               {/* Profile dropdown */}
               <Menu as="div" className="ml-3 relative">
                 <div>
                   <Menu.Button className="max-w-xs bg-white dark:bg-slate-800 flex items-center text-sm rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 dark:focus:ring-offset-slate-900">
                     <span className="sr-only">Abrir menú de usuario</span>
-                    {user && user.photo ? (
+                    {profile && profile.photo ? (
                       <img
                         className="h-8 w-8 rounded-full object-cover"
-                        src={user.photo.startsWith('http') ? user.photo : `${process.env.REACT_APP_API_URL}${user.photo}`}
+                        src={profile.photo.startsWith('http') ? profile.photo : `${process.env.REACT_APP_API_URL}${profile.photo}`}
                         alt=""
                         onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline-block'; }}
                       />
                     ) : null}
                     <span 
                         className="inline-block h-8 w-8 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700"
-                        style={{ display: user?.photo ? 'none' : 'inline-block' }}
+                        style={{ display: profile?.photo ? 'none' : 'inline-block' }}
                     >
                       <svg className="h-full w-full text-slate-300 dark:text-slate-500" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
@@ -201,14 +229,18 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
         </div>
 
         {/* CONTENIDO PRINCIPAL */}
-        <main className="flex-1 pb-8">
-          <div className="mt-8">
+        <main className="flex-1 pb-8 flex flex-col">
+          <div className="mt-8 flex-grow">
             <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
               {children}
             </div>
           </div>
         </main>
       </div>
+      </div>
+      
+      {/* FOOTER */}
+      <Footer />
     </div>
   )
 }

@@ -99,10 +99,14 @@ const CommentSection = ({
                                 <textarea
                                     className="w-full border-gray-300 rounded-md p-3 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white resize-none"
                                     rows="3"
+                                    maxLength={500}
                                     placeholder="Escribe tu comentario aquí..."
                                     value={newComment}
                                     onChange={(e) => setNewComment(e.target.value)}
                                 />
+                                <div className="text-right text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                    {newComment.length}/500 caracteres
+                                </div>
                             </div>
                         </div>
                         <div className="flex justify-end">

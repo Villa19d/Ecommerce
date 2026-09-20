@@ -7,7 +7,8 @@ import {
     update_item,
     get_items,
     get_total,
-    get_item_total
+    get_item_total,
+    add_item
 } from "../../Redux/Actions/cart";
 import {
     remove_wishlist_item,
@@ -32,7 +33,8 @@ const Cart = ({
     update_item,
     setAlert,
     wishlist_items,
-    remove_wishlist_item
+    remove_wishlist_item,
+    add_item
 }) => {
 
     const [render, setRender] = useState(false);
@@ -90,6 +92,7 @@ const Cart = ({
                                   count={count}
                                   update_item={update_item}
                                   remove_wishlist_item={remove_wishlist_item}
+                                  add_item={add_item}
                                   render={render}
                                   setRender={setRender}
                                   setAlert={setAlert}
@@ -180,7 +183,7 @@ const Cart = ({
 
               <div className="flex items-center justify-between">
                 <dt className="text-sm text-gray-600">Subtotal</dt>
-                <dd className="text-sm font-medium text-gray-900">${compare_amount.toFixed(2)}</dd>
+                <dd className="text-sm font-medium text-gray-900">${amount.toFixed(2)}</dd>
               </div>
 
               <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
@@ -207,7 +210,7 @@ const Cart = ({
 
               <div className="border-t border-gray-200 pt-4 flex items-center justify-between">
                 <dt className="text-base font-medium text-gray-900">Order total</dt>
-                <dd className="text-base font-medium text-gray-900">${amount.toFixed(2)}</dd>
+                <dd className="text-base font-medium text-gray-900">${(amount + 5.00 + 8.32).toFixed(2)}</dd>
               </div>
             </dl>
 
@@ -216,10 +219,16 @@ const Cart = ({
             </div>
           </section>
         </div>
-        
-        {showWishlistItems()}
-
-      </div>
+        {wishlist_items && wishlist_items.length > 0 && (
+            <div className="mt-16 sm:mt-24">
+              <h2 className="text-2xl font-extrabold tracking-tight text-gray-900 sm:text-3xl border-b border-gray-200 pb-4 mb-8">
+                  Artículos Guardados (Wishlist)
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-y-10 gap-x-6 xl:gap-x-8">
+                  {showWishlistItems()}
+              </div>
+            </div>
+        )}      </div>
     </div>
         </Layout>
     )
@@ -240,5 +249,6 @@ export default connect(mapStateToProps,{
     remove_item,
     update_item,
     setAlert,
-    remove_wishlist_item
+    remove_wishlist_item,
+    add_item
 }) (Cart)

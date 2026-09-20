@@ -6,12 +6,19 @@ import  Footer  from "../components/navigation/Footer";
 import { useEffect } from "react";
 
 import {check_authenticated,load_user,refresh}from '../Redux/Actions/auth'
+import {get_items, get_total, get_item_total} from '../Redux/Actions/cart'
+import {get_wishlist_items, get_wishlist_item_total} from '../Redux/Actions/wishlist'
 
 const Layout = (props)=>{
   useEffect(()=>{
     props.refresh();
     props.check_authenticated();
     props.load_user();
+    props.get_items();
+    props.get_total();
+    props.get_item_total();
+    props.get_wishlist_items();
+    props.get_wishlist_item_total();
   },[]);
     return(
         <div className="min-h-screen bg-slate-50 dark:bg-slate-900 text-slate-900 dark:text-slate-100 transition-colors duration-300">
@@ -26,7 +33,12 @@ const Layout = (props)=>{
 export default connect(null,{
   check_authenticated,
   load_user,
-  refresh
+  refresh,
+  get_items,
+  get_total,
+  get_item_total,
+  get_wishlist_items,
+  get_wishlist_item_total
 })(Layout) 
 
 

@@ -24,6 +24,7 @@ import {
 
 import {setAlert} from './Alert.js'
 import axios from 'axios';
+import { synch_cart, get_items, get_total, get_item_total } from './cart';
 
 //Acá añadimos los datos que usamos en postman para los usuarios 
 /*Esta función signup es una acción de Redux. 
@@ -154,6 +155,10 @@ export const login = (email,password) => async dispatch =>{
       dispatch({
         type:REMOVE_AUTH_LOADING
       });
+      await dispatch(synch_cart());
+      dispatch(get_items());
+      dispatch(get_total());
+      dispatch(get_item_total());
       dispatch(setAlert('Inicio de sesión exitoso', 'green'))
      }else{
       dispatch({

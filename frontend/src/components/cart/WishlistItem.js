@@ -7,16 +7,17 @@ const WishlistItem = ({
     count,
     update_item,
     remove_wishlist_item,
+    add_item,
     render,
     setRender,
     setAlert
-})=>{
+}) => {
     const [formData, setFormData] = useState({
         item_count: 1
     });
 
     const { item_count } = formData;
-    
+
     useEffect(() => {
         if (count)
             setFormData({ ...formData, item_count: count });
@@ -35,7 +36,7 @@ const WishlistItem = ({
                     setAlert('Not enough in stock', 'danger');
                 }
                 setRender(!render);
-            } catch(err) {
+            } catch (err) {
 
             }
         };
@@ -44,94 +45,89 @@ const WishlistItem = ({
     }
 
     const removeItemHandler = async () => {
-        await remove_wishlist_item(item);
-        window.location.reload(false);
+        await remove_wishlist_item(item.product.id);
+        setRender(!render);
     };
 
-    return(
+    const addToCartHandler = async () => {
+        if (item.product && item.product.quantity > 0) {
+            await add_item(item.product);
+            setRender(!render);
+            setAlert('Artículo agregado al carrito', 'success');
+        } else {
+            setAlert('El artículo está agotado', 'danger');
+        }
+    };
+
+    return (
         <li className="flex py-6 sm:py-10">
             <div className="flex-shrink-0">
-            <img
-                src={item.product.photo}
-                alt=""
-                className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
-            />
+                <Link to={`/product/${item.product.id}`}>
+                    <img
+                        src={item.product.photo}
+                        alt=""
+                        className="w-24 h-24 rounded-md object-center object-cover sm:w-48 sm:h-48"
+                    />
+                </Link>
             </div>
 
             <div className="ml-4 flex-1 flex flex-col justify-between sm:ml-6">
-            <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
-                <div>
-                <div className="flex justify-between">
-                    <h3 className="text-sm">
-                    <Link to={`/product/${item.product.id}`} className="font-medium text-gray-700 hover:text-gray-800">
-                        {item.product.name}
-                    </Link>
-                    </h3>
-                </div>
-                <div className="mt-1 flex text-sm">
-                    <p className="text-gray-500">Color</p>
-                    {/* {product.size ? (
+                <div className="relative pr-9 sm:grid sm:grid-cols-2 sm:gap-x-6 sm:pr-0">
+                    <div>
+                        <div className="flex justify-between">
+                            <h3 className="text-sm">
+                                <Link to={`/product/${item.product.id}`} className="font-medium text-gray-700 hover:text-gray-800">
+                                    {item.product.name}
+                                </Link>
+                            </h3>
+                        </div>
+                        <div className="mt-1 flex text-sm">
+                            <p className="text-gray-500">Color</p>
+                            {/* {product.size ? (
                     <p className="ml-4 pl-4 border-l border-gray-200 text-gray-500">{product.size}</p>
                     ) : null} */}
-                </div>
-                <p className="mt-1 text-sm font-medium text-gray-900">$ {item.product.price}</p>
+                        </div>
+                        <p className="mt-1 text-sm font-medium text-gray-900">$ {item.product.price}</p>
+                        <div className="mt-4 flex items-center justify-start ">
+                            <button
+                                onClick={addToCartHandler}
+                                className="px-2 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                            >
+                                Agregar a carrito
+                            </button>
+                        </div>
+                    </div>
+
+
+                    <div className="absolute top-0 right-0 mt-2 sm:mt-0">
+                        <button
+                            onClick={removeItemHandler}
+                            className="-m-2 p-2 inline-flex text-gray-400 hover:text-red-500 transition-colors">
+                            <span className="sr-only">Remove</span>
+                            <XIcon className="h-6 w-6" aria-hidden="true" />
+                        </button>
+                    </div>
                 </div>
 
-                <div className="mt-4 sm:mt-0 sm:pr-9">
-                <form onSubmit={e => onSubmit(e)}>
-                    <select
-                        name='item_count' 
-                        onChange={(e) => onChange(e)}
-                        value={item_count}
-                        className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-                    >
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                    </select>
-                    <button 
-                        type="submit"
-                        className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500">
-                        <span className="mx-2">Update</span>
-                    </button>
-                </form>
-
-                <div className="absolute top-0 right-0">
-                    <button 
-                    onClick={removeItemHandler}
-                    className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500">
-                    <span className="sr-only">Remove</span>
-                    <XIcon className="h-5 w-5" aria-hidden="true" />
-                    </button>
-                </div>
-                </div>
-            </div>
-
-            <p className="mt-4 flex text-sm text-gray-700 space-x-2">
-                {     
-                    item.product && 
-                    item.product !== null &&
-                    item.product !== undefined && 
-                    item.product.quantity > 0 ? 
-                (
-                    <>
-                    <CheckIcon className="flex-shrink-0 h-5 w-5 text-green-500" aria-hidden="true" />
-                    <span>In Stock</span>
-                    </>
-                ) 
-                : (
-                    <>
-                <ClockIcon className="flex-shrink-0 h-5 w-5 text-gray-300" aria-hidden="true" />
-                <span>Out of Stock</span>
-                    </>
-                )}
-            </p>
+                <p className="mt-4 flex text-sm text-gray-700 space-x-2">
+                    {
+                        item.product &&
+                            item.product !== null &&
+                            item.product !== undefined &&
+                            item.product.quantity > 0 ?
+                            (
+                                <>
+                                    <CheckIcon className="flex-shrink-0 h-5 w-5 text-green-500" aria-hidden="true" />
+                                    <span>In Stock</span>
+                                </>
+                            )
+                            : (
+                                <>
+                                    <ClockIcon className="flex-shrink-0 h-5 w-5 text-gray-300" aria-hidden="true" />
+                                    <span>Out of Stock</span>
+                                </>
+                            )}
+                </p>
             </div>
         </li>
     )

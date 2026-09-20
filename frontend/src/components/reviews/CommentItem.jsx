@@ -82,7 +82,7 @@ const CommentItem = ({
                     </div>
                 </div>
                 
-                <div className="flex-grow">
+                <div className="flex-grow min-w-0">
                     <div className="flex items-center space-x-2 relative">
                         <span className="font-semibold text-gray-900 dark:text-white">
                             @{review.user_name}
@@ -126,9 +126,13 @@ const CommentItem = ({
                                 <textarea
                                     className="w-full border rounded-md p-2 text-sm focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:text-white dark:border-gray-600"
                                     rows="2"
+                                    maxLength={500}
                                     value={editText}
                                     onChange={(e) => setEditText(e.target.value)}
                                 />
+                                <div className="text-right text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                    {editText.length}/500 caracteres
+                                </div>
                                 <div className="flex justify-end space-x-2 mt-2">
                                     <button 
                                         type="button" 
@@ -147,7 +151,7 @@ const CommentItem = ({
                                 </div>
                             </form>
                         ) : (
-                            <p className="text-sm whitespace-pre-wrap">{review.comment}</p>
+                            <p className="text-sm whitespace-pre-wrap break-all">{review.comment}</p>
                         )}
                     </div>
 
@@ -206,10 +210,14 @@ const CommentItem = ({
                                     type="text"
                                     className="w-full text-sm border-b-2 border-gray-300 focus:border-blue-600 focus:ring-0 bg-transparent px-0 py-1 dark:text-white"
                                     placeholder="Añade una respuesta..."
+                                    maxLength={500}
                                     value={replyText}
                                     onChange={(e) => setReplyText(e.target.value)}
                                     autoFocus
                                 />
+                                <div className="text-right text-xs text-gray-400 dark:text-gray-500 mt-1">
+                                    {replyText.length}/500 caracteres
+                                </div>
                                 <div className="flex justify-end space-x-2 mt-2">
                                     <button 
                                         type="button" 
