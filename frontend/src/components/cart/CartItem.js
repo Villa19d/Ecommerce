@@ -63,18 +63,18 @@ const CartItem = ({
                 <div>
                 <div className="flex justify-between">
                     <h3 className="text-sm">
-                    <Link to={`/product/${item.product.id}`} className="font-medium text-gray-700 hover:text-gray-800">
+                    <Link to={`/product/${item.product.id}`} className="font-medium text-gray-700 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
                         {item.product.name}
                     </Link>
                     </h3>
                 </div>
                 <div className="mt-1 flex text-sm">
-                    <p className="text-gray-500">Color</p>
+                    <p className="text-gray-500 dark:text-gray-400">Color</p>
                     {/* {product.size ? (
                     <p className="ml-4 pl-4 border-l border-gray-200 text-gray-500">{product.size}</p>
                     ) : null} */}
                 </div>
-                <p className="mt-1 text-sm font-medium text-gray-900">$ {item.product.price}</p>
+                <p className="mt-1 text-sm font-medium text-gray-900 dark:text-white">$ {item.product.price}</p>
                 </div>
 
                 <div className="mt-4 sm:mt-0 sm:pr-9">
@@ -83,7 +83,7 @@ const CartItem = ({
                         name='item_count' 
                         onChange={(e) => onChange(e)}
                         value={item_count}
-                        className="max-w-full rounded-md border border-gray-300 py-1.5 text-base leading-5 font-medium text-gray-700 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="max-w-full rounded-md border border-gray-300 dark:border-gray-700 bg-white dark:bg-slate-800 py-1.5 text-base leading-5 font-medium text-gray-700 dark:text-gray-300 text-left shadow-sm focus:outline-none focus:ring-1 focus:ring-indigo-500 dark:focus:ring-indigo-400 focus:border-indigo-500 dark:focus:border-indigo-400 sm:text-sm"
                     >
                         <option>1</option>
                         <option>2</option>
@@ -97,7 +97,7 @@ const CartItem = ({
                     </select>
                     <button 
                         type="submit"
-                        className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500">
+                        className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                         <span className="mx-2">Update</span>
                     </button>
                 </form>
@@ -105,7 +105,7 @@ const CartItem = ({
                 <div className="absolute top-0 right-0">
                     <button 
                     onClick={removeItemHandler}
-                    className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500">
+                    className="-m-2 p-2 inline-flex text-gray-400 hover:text-gray-500 dark:hover:text-gray-300">
                     <span className="sr-only">Remove</span>
                     <XIcon className="h-5 w-5" aria-hidden="true" />
                     </button>
@@ -113,7 +113,7 @@ const CartItem = ({
                 </div>
             </div>
 
-            <p className="mt-4 flex text-sm text-gray-700 space-x-2">
+            <p className="mt-4 flex text-sm text-gray-700 dark:text-gray-300 space-x-2">
                 {     
                     item.product && 
                     item.product !== null &&
@@ -127,7 +127,7 @@ const CartItem = ({
                 ) 
                 : (
                     <>
-                <ClockIcon className="flex-shrink-0 h-5 w-5 text-gray-300" aria-hidden="true" />
+                <ClockIcon className="flex-shrink-0 h-5 w-5 text-gray-300 dark:text-gray-500" aria-hidden="true" />
                 <span>Out of Stock</span>
                     </>
                 )}

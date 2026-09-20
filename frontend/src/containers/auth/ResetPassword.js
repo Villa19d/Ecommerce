@@ -7,7 +7,6 @@ import { Navigate } from 'react-router-dom';
 import { Oval } from 'react-loader-spinner';
 import { faPassport } from '@fortawesome/free-solid-svg-icons';
 import {reset_password} from '../../Redux/Actions/auth'
-import Loader from 'react-loader-spinner'
 
 
 const ResetPassword =({reset_password

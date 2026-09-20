@@ -76,22 +76,22 @@ const WishlistItem = ({
                     <div>
                         <div className="flex justify-between">
                             <h3 className="text-sm">
-                                <Link to={`/product/${item.product.id}`} className="font-medium text-gray-700 hover:text-gray-800">
+                                <Link to={`/product/${item.product.id}`} className="font-medium text-gray-700 dark:text-gray-300 hover:text-gray-800 dark:hover:text-white">
                                     {item.product.name}
                                 </Link>
                             </h3>
                         </div>
                         <div className="mt-1 flex text-sm">
-                            <p className="text-gray-500">Color</p>
+                            <p className="text-gray-500 dark:text-gray-400">Color</p>
                             {/* {product.size ? (
                     <p className="ml-4 pl-4 border-l border-gray-200 text-gray-500">{product.size}</p>
                     ) : null} */}
                         </div>
-                        <p className="mt-1 text-sm font-medium text-gray-900">$ {item.product.price}</p>
+                        <p className="mt-1 text-sm font-medium text-gray-900 dark:text-white">$ {item.product.price}</p>
                         <div className="mt-4 flex items-center justify-start ">
                             <button
                                 onClick={addToCartHandler}
-                                className="px-2 py-1 border border-transparent text-xs font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                                className="px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
                             >
                                 Agregar a carrito
                             </button>
@@ -109,7 +109,7 @@ const WishlistItem = ({
                     </div>
                 </div>
 
-                <p className="mt-4 flex text-sm text-gray-700 space-x-2">
+                <p className="mt-4 flex text-sm text-gray-700 dark:text-gray-300 space-x-2">
                     {
                         item.product &&
                             item.product !== null &&
@@ -123,7 +123,7 @@ const WishlistItem = ({
                             )
                             : (
                                 <>
-                                    <ClockIcon className="flex-shrink-0 h-5 w-5 text-gray-300" aria-hidden="true" />
+                                    <ClockIcon className="flex-shrink-0 h-5 w-5 text-gray-300 dark:text-gray-500" aria-hidden="true" />
                                     <span>Out of Stock</span>
                                 </>
                             )}
