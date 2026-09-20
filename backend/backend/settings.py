@@ -295,7 +295,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 #/****************************CONECTAR EMAILS*********************************************************************/
-AUTH_USER_MODEL = "user.UserAccount"
+AUTH_USER_MODEL = 'user.UserAccount' #Le decimos a Django que el modelo de usuario que vamos a usar es el que acabamos de crear
+
+# Domain for Djoser emails
+DOMAIN = '127.0.0.1:3000'
+SITE_NAME = 'NitroStore'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER', default='luisrodrigo1005@gmail.com')

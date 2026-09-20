@@ -1,7 +1,6 @@
 import Layout from "../../hocs/layout"
-import {useParams} from 'react-router'
 import { connect } from 'react-redux';
-import {useNavigate} from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { 
   add_wishlist_item, 
   get_wishlist_items, 
@@ -121,9 +120,17 @@ const ProductDetails =({
       }
     };
 
-    
     const params = useParams()
-    const productId = params.productId
+    let productId = params.productId
+
+    // Si por alguna razón productId llega como 'undefined' o no se extrae correctamente
+    if (!productId || productId === 'undefined') {
+        const pathParts = window.location.pathname.split('/');
+        const index = pathParts.indexOf('product');
+        if (index !== -1 && pathParts.length > index + 1) {
+            productId = pathParts[index + 1];
+        }
+    }
 
     useEffect(() => {
       window.scrollTo(0,0)
@@ -183,6 +190,27 @@ const ProductDetails =({
     const getReviews = () => {
         get_reviews(productId);
     };
+
+    if (!productId || productId === 'undefined') {
+        return (
+            <Layout>
+                <div className="flex flex-col items-center justify-center min-h-screen bg-transparent">
+                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-200">Enlace roto</h2>
+                    <p className="text-slate-500 mt-2">El producto que intentas buscar no es válido o no tiene un ID.</p>
+                </div>
+            </Layout>
+        )
+    }
+
+    if (!product) {
+        return (
+            <Layout>
+                <div className="flex items-center justify-center min-h-screen bg-transparent transition-colors duration-300">
+                    <Oval color="#4f46e5" width={80} height={80}/>
+                </div>
+            </Layout>
+        )
+    }
 
     return(
         <Layout>
