@@ -392,3 +392,64 @@ export const reset_password_confirm = (uid, token, new_password, re_new_password
    }
 }
 
+export const continue_with_google = () => async dispatch => {
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/google-oauth2/?redirect_uri=${window.location.origin}${window.location.pathname}`);
+    localStorage.setItem('social_provider', 'google-oauth2');
+    window.location.replace(res.data.authorization_url);
+  } catch(e) {
+    dispatch(setAlert('Error al conectar con Google', 'red'));
+  }
+}
+
+export const continue_with_github = () => async dispatch => {
+  try {
+    const res = await axios.get(`${process.env.REACT_APP_API_URL}/auth/o/github/?redirect_uri=${window.location.origin}${window.location.pathname}`);
+    localStorage.setItem('social_provider', 'github');
+    window.location.replace(res.data.authorization_url);
+  } catch(e) {
+    dispatch(setAlert('Error al conectar con GitHub', 'red'));
+  }
+}
+
+export const social_authenticate = (state, code, provider) => async dispatch => {
+  dispatch({ type: SET_AUTH_LOADING });
+  
+  const config = {
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded'
+    },
+    withCredentials: true
+  };
+  
+  const details = {
+    'state': state,
+    'code': code,
+    'redirect_uri': window.location.origin + window.location.pathname
+  };
+
+  const formBody = Object.keys(details).map(key => encodeURIComponent(key) + '=' + encodeURIComponent(details[key])).join('&');
+
+  try {
+    const res = await axios.post(`${process.env.REACT_APP_API_URL}/auth/o/${provider}/?state=${state}`, formBody, config);
+
+    if (res.status === 201 || res.status === 200) {
+      dispatch({
+        type: LOGIN_SUCCESS,
+        payload: res.data
+      });
+      dispatch(load_user());
+      dispatch({ type: REMOVE_AUTH_LOADING });
+      dispatch(setAlert('Inicio de sesión exitoso', 'green'));
+    } else {
+      dispatch({ type: LOGIN_FAIL });
+      dispatch({ type: REMOVE_AUTH_LOADING });
+      dispatch(setAlert('Error al iniciar sesión', 'red'));
+    }
+  } catch (err) {
+    console.error("SOCIAL AUTH ERROR: ", err.response?.data || err.message);
+    dispatch({ type: LOGIN_FAIL });
+    dispatch({ type: REMOVE_AUTH_LOADING });
+    dispatch(setAlert('Error al autenticar. Revisa tus credenciales', 'red'));
+  }
+};

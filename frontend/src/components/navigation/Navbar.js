@@ -71,7 +71,6 @@ function Navbar({
   }
 
   if (redirect) {
-    window.location.reload(false)
     return <Navigate to='/' />;
   }
 

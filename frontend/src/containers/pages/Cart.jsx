@@ -121,7 +121,7 @@ const Cart = ({
             </Link>
             </>
             )
-        } else if (!isAuthenticated) {
+        } else if (isAuthenticated === false) {
             return(<>
             <Link
                 to='/login'

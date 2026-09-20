@@ -42,13 +42,13 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
     get_user_profile()
   }, [get_user_profile])
 
-  if (!isAuthenticated) {
+  if (isAuthenticated === false) {
     return <Navigate to="/login" />
   }
 
   const userNavigation = [
     { name: 'Tu Perfil', href: '/dashboard/profile' },
-    { name: 'Cerrar Sesión', href: '#', onClick: () => { logout(); window.location.reload(); } }
+    { name: 'Cerrar Sesión', href: '#', onClick: () => { logout(); } }
   ]
 
   return (
