@@ -199,10 +199,10 @@ const ProductDetails =({
 
                             {/* Información del Producto */}
                             <div className="p-8 lg:p-12 flex flex-col justify-center">
-                                <h1 className="text-4xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-2">{product && product.name}</h1>
+                                <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white mb-2">{product && product.name}</h1>
                                 
                                 <div className="mt-4 flex items-center justify-between">
-                                    <p className="text-4xl font-black text-indigo-600 dark:text-indigo-400">
+                                    <p className="text-3xl font-black text-indigo-600 dark:text-indigo-400">
                                         ${product && product.price}
                                     </p>
                                     <div className="flex items-center relative z-50">
@@ -238,13 +238,13 @@ const ProductDetails =({
 
                                 <div className="mt-10 flex gap-4">
                                     {loading ? (
-                                        <button disabled className="flex-1 bg-indigo-600 border border-transparent rounded-xl py-4 px-8 flex items-center justify-center text-lg font-bold text-white opacity-70 cursor-not-allowed transition-all shadow-lg">
+                                        <button disabled className="flex-1 bg-indigo-600 border border-transparent rounded-xl py-4 px-8 flex items-center justify-center text-base font-bold text-white opacity-70 cursor-not-allowed transition-all shadow-lg">
                                             <Oval color="#fff" width={24} height={24}/>
                                         </button>
                                     ) : (
                                         <button 
                                             onClick={addToCart}
-                                            className="flex-1 bg-indigo-600 border border-transparent rounded-xl py-4 px-8 flex items-center justify-center text-lg font-bold text-white hover:bg-indigo-700 hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform active:scale-95 shadow-lg dark:focus:ring-offset-slate-900"
+                                            className="flex-1 bg-indigo-600 border border-transparent rounded-xl py-4 px-8 flex items-center justify-center text-base font-bold text-white hover:bg-indigo-700 hover:shadow-xl hover:-translate-y-1 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all duration-300 transform active:scale-95 shadow-lg dark:focus:ring-offset-slate-900"
                                         >
                                             Añadir al Carrito
                                         </button>

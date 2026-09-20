@@ -116,9 +116,9 @@ function Navbar({
 
             {/* Logo Section */}
             <div className="flex justify-start flex-shrink-0">
-              <Link to="/" className="flex">
+              <Link to="/" className="flex items-center">
                 <span className="sr-only">NitroStore</span>
-                <Logo className="h-10 w-auto" />
+                <Logo className="h-14 w-auto" />
               </Link>
             </div>
 
