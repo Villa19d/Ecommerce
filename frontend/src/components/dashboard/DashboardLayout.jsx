@@ -170,7 +170,7 @@ const DashboardLayout = ({ isAuthenticated, user, profile, get_user_profile, log
                     {profile && profile.photo ? (
                       <img
                         className="h-8 w-8 rounded-full object-cover"
-                        src={profile.photo.startsWith('http') ? profile.photo : `${process.env.REACT_APP_API_URL}${profile.photo}`}
+                        src={profile.photo}
                         alt=""
                         onError={(e) => { e.target.style.display = 'none'; e.target.nextSibling.style.display = 'inline-block'; }}
                       />
