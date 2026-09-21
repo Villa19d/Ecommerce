@@ -24,7 +24,7 @@ class ProductDetailView(APIView):
     
         if Product.objects.select_related('category').filter(id=product_id).exists():
             product = Product.objects.select_related('category').get(id=product_id)
-            product = ProductSerializer(product)
+            product = ProductSerializer(product, context={'request': request})
             return Response({'product':product.data}, status = status.HTTP_200_OK)
         else:
             return Response(
@@ -66,7 +66,7 @@ class ListProductsView(APIView):
         else:
             products = Product.objects.select_related('category').order_by(sortBy).all()      
 
-        products = ProductSerializer(products, many = True)
+        products = ProductSerializer(products, many = True, context={'request': request})
 
         if products:
             return Response({'products': products.data}, status=status.HTTP_200_OK)
@@ -96,7 +96,7 @@ class ListSearchView(APIView):
             search_results = Product.objects.select_related('category').filter(Q(description__icontains = search)| Q(name__icontains=search))    
         
         if category_id == 0:
-            search_results = ProductSerializer(search_results, many = True)
+            search_results = ProductSerializer(search_results, many = True, context={'request': request})
             return Response({'search_products':search_results.data},status=status.HTTP_200_OK)
         
         if not Category.objects.filter(id=category_id).exists():
@@ -120,7 +120,7 @@ class ListSearchView(APIView):
                 filtered_categories = tuple(filtered_categories)
 
                 search_results = search_results.order_by('-date_created').filter(category__in = filtered_categories)
-        search_results = ProductSerializer(search_results, many= True)
+        search_results = ProductSerializer(search_results, many= True, context={'request': request})
         return Response({'search_products': search_results.data}, status=status.HTTP_200_OK)  
 
 class ListRelatedView(APIView):
@@ -168,7 +168,7 @@ class ListRelatedView(APIView):
                 
             #Excluir producto que estamos viendo
             related_products = related_products.exclude(id=product_id)
-            related_products = ProductSerializer(related_products, many=True)
+            related_products = ProductSerializer(related_products, many=True, context={'request': request})
 
             if len(related_products.data) > 3:
                 return Response(
@@ -261,7 +261,7 @@ class ListBySearchView(APIView):
         else:
             product_results = product_results.order_by(sort_by)
         
-        product_results = ProductSerializer(product_results, many=True)
+        product_results = ProductSerializer(product_results, many=True, context={'request': request})
 
         if len(product_results.data) > 0:
             return Response(

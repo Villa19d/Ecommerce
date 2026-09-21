@@ -42,7 +42,7 @@ export default function Banner() {
                       <div className="flex-shrink-0 grid grid-cols-1 gap-y-6 lg:gap-y-8">
                         <div className="w-44 h-64 rounded-lg overflow-hidden">
                           <img
-                            src="https://legitec.com/wp-content/uploads/2021/03/ciberseguridad-y-hacking-etico-1.jpg"
+                            src={`${process.env.REACT_APP_API_URL}/media/photos/2024/09/predator_helios_300.jpg`}
                             alt=""
                             className="w-full h-full object-center object-cover"
                           />
