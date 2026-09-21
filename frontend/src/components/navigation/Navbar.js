@@ -79,7 +79,7 @@ function Navbar({
       {profile && profile.photo ? (
         <img
           className="h-14 w-14 rounded-full object-cover"
-          src={`${process.env.REACT_APP_API_URL}${profile.photo}`}
+          src={profile.photo.startsWith('http') ? profile.photo : `${process.env.REACT_APP_API_URL}${profile.photo}`}
           alt=""
         />
       ) : (

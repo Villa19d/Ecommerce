@@ -83,7 +83,7 @@ const DashboardProfile = ({
                             <div className="mt-2 sm:mt-0 sm:w-2/3 flex items-center">
                                 <span className="h-16 w-16 rounded-full overflow-hidden bg-slate-100 dark:bg-slate-700 ring-2 ring-slate-200 dark:ring-slate-600 shrink-0">
                                     {profile && profile.photo ? (
-                                        <img src={`${process.env.REACT_APP_API_URL}${profile.photo}`} alt="Profile" className="h-full w-full object-cover" />
+                                        <img src={profile.photo.startsWith('http') ? profile.photo : `${process.env.REACT_APP_API_URL}${profile.photo}`} alt="Profile" className="h-full w-full object-cover" />
                                     ) : (
                                         <svg className="h-full w-full text-slate-300 dark:text-slate-500" fill="currentColor" viewBox="0 0 24 24">
                                             <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
