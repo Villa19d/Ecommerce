@@ -115,8 +115,8 @@ const ProductDetails =({
         }
           
       } else {
-        console.log("[CHECKPOINT 2] User not authenticated. Redirecting...");
-        return navigate('/cart');
+        console.log("[CHECKPOINT 2] User not authenticated. Redirecting to signup...");
+        return navigate('/signup');
       }
     };
 
