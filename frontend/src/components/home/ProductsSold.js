@@ -59,14 +59,17 @@ const products = [
             {data && 
             data !== null &&
             data !== undefined &&
-            data.map((product) => (
+            data.map((product) => {
+              console.log("[CHECKPOINT ProductsSold] rendering product:", product.name, "photo:", product.photo);
+              return (
               <div key={product.id} className="group relative min-w-[280px] sm:min-w-[300px] snap-center shrink-0 px-2 py-4">
                 <div className="flex flex-col bg-white dark:bg-slate-800 rounded-xl transition-all duration-300 transform group-hover:-translate-y-2 group-hover:scale-105 group-hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] ring-1 ring-slate-200 dark:ring-slate-700 hover:z-10">
                   <div className="w-full h-96 rounded-t-xl overflow-hidden sm:h-[400px] relative">
                     <img
-                      src={product.photo}
+                      src={product.photo && product.photo.startsWith('http') ? product.photo : `${process.env.REACT_APP_API_URL}${product.photo || product.get_thumbnail}`}
                       alt=""
                       className="w-full h-full object-center object-cover transition-transform duration-500 group-hover:scale-110"
+                      onError={(e) => console.error("[CHECKPOINT ERROR ProductsSold] Failed to load image:", product.photo)}
                     />
                   </div>
                   <div className="p-4 rounded-b-xl">
@@ -80,7 +83,7 @@ const products = [
                   </div>
                 </div>
               </div>
-            ))}
+            )})}
             </div>
 
             <button 
