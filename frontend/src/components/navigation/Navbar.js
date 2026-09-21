@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { Popover, Transition } from '@headlessui/react'
 import { Link, NavLink } from 'react-router-dom'
-import { Navigate } from 'react-router';
+import { Navigate } from 'react-router-dom';
 import Alert from '../alert.js'
 import { get_categories } from '../../Redux/Actions/categories.js';
 import { get_search_products } from '../../Redux/Actions/products';

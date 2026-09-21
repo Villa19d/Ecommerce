@@ -31,7 +31,7 @@ const ResetPassword =({reset_password
     setRequestSent(true);
   }
 
-  if(requestSent && !loading) return <Navigate to="/"/>;
+  if(requestSent && !loading) return <Navigate to="/login"/>;
 
     return(
         <Layout>
@@ -42,7 +42,7 @@ const ResetPassword =({reset_password
             src="https://tailwindui.com/img/logos/workflow-mark-indigo-600.svg"
             alt="Workflow"
           />
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">Recover you password</h2>
+          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900 dark:text-white">Reset your password</h2>
           
         </div>
 
@@ -61,7 +61,7 @@ const ResetPassword =({reset_password
                     type="email"
                     placeholder="Email"
                     required
-                    className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 dark:text-white dark:bg-slate-800 shadow-sm ring-1 ring-inset ring-gray-300 dark:ring-slate-700 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                   />
                 </div>
               </div>

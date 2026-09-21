@@ -30,7 +30,7 @@ import {
 import { useEffect, useState } from "react";
 import ImageGallery from "../../components/product/ImageGallery";
 import WishlistHeart from "../../components/product/WhishListHeart";
-import { Navigate } from "react-router";
+import { Navigate } from 'react-router-dom';
 import CommentSection from "../../components/reviews/CommentSection";
 
 import Stars from '../../components/product/Stars'
