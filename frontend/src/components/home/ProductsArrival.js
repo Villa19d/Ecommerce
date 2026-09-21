@@ -53,7 +53,7 @@ export default function ProductsArrival({
                 <div className="flex flex-col bg-white dark:bg-slate-800 rounded-xl transition-all duration-300 transform group-hover:-translate-y-2 group-hover:scale-105 group-hover:shadow-[0_0_30px_rgba(99,102,241,0.4)] ring-1 ring-slate-200 dark:ring-slate-700 hover:z-10">
                   <div className="w-full min-h-80 bg-gray-200 aspect-w-1 aspect-h-1 rounded-t-xl overflow-hidden lg:h-80 lg:aspect-none relative">
                     <img
-                      src={product.get_thumbnail}
+                      src={product.photo}
                       alt=""
                       className="w-full h-full object-center object-cover lg:w-full lg:h-full transition-transform duration-500 group-hover:scale-110"
                     />

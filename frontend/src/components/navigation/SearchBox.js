@@ -136,7 +136,7 @@ const SearchBox = ({
                                 >
                                     <div className="flex-shrink-0 h-10 w-10 bg-slate-100 dark:bg-slate-900 rounded overflow-hidden">
                                         <img
-                                            src={`${process.env.REACT_APP_API_URL}${product.photo}`}
+                                            src={product.photo && product.photo.startsWith('http') ? product.photo : `${process.env.REACT_APP_API_URL}${product.photo}`}
                                             alt={product.name}
                                             className="h-full w-full object-cover"
                                         />
