@@ -60,7 +60,6 @@ class ListProductsView(APIView):
         if order == 'desc':
             sortBy = '-' + sortBy
             products = Product.objects.select_related('category').order_by(sortBy).all()[:int(limit)]
-            print("Productooooooos",products)
         elif order == 'asc':
               products = Product.objects.select_related('category').order_by(sortBy).all()[:int(limit)]
         else:

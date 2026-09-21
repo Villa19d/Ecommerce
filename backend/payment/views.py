@@ -80,6 +80,7 @@ class GetPaymentTotalView(APIView):
 
             total_compare_amount = round(total_compare_amount, 2)
             original_price = round(total_amount, 2)
+            total_after_coupon = total_amount
 
             # Cupones
             if coupon_name != '':
@@ -115,7 +116,7 @@ class GetPaymentTotalView(APIView):
 
             shipping_cost = 0.0
             # verificar que el envio sea valido
-            if Shipping.objects.filter(id__iexact=shipping_id).exists():
+            if Shipping.objects.filter(id=shipping_id).exists():
                 # agregar shipping a total amount
                 shipping = Shipping.objects.get(id=shipping_id)
                 shipping_cost = shipping.price
@@ -135,7 +136,10 @@ class GetPaymentTotalView(APIView):
                 status=status.HTTP_200_OK
             )
 
-        except:
+        except Exception as e:
+            print("Error in GetPaymentTotalView:", e)
+            import traceback
+            traceback.print_exc()
             return Response(
                 {'error': 'Something went wrong when retrieving payment total information'},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
@@ -163,7 +167,7 @@ class ProcessPaymentView(APIView):
         telephone_number = data['telephone_number']
 
         # revisar si datos de shipping son validos
-        if not Shipping.objects.filter(id__iexact=shipping_id).exists():
+        if not Shipping.objects.filter(id=shipping_id).exists():
             return Response(
                 {'error': 'Invalid shipping option'},
                 status=status.HTTP_404_NOT_FOUND
