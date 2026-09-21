@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React, { useEffect, useState, useRef } from 'react';
 import {connect} from 'react-redux';
 import {signup, continue_with_google, continue_with_github, social_authenticate} from '../../Redux/Actions/auth.js';
-import { useLocation, Navigate } from 'react-router-dom';
+import { useLocation, Navigate, Link } from 'react-router-dom';
 
  const Signup=({
     signup,
@@ -182,9 +182,9 @@ const onSubmit = e=>{
                 </button>
 
                 <div class="mt-6 text-center ">
-                    <a href="#" class="text-sm text-blue-500 hover:underline dark:text-blue-400">
+                    <Link to="/login" class="text-sm text-blue-500 hover:underline dark:text-blue-400">
                         Already have an account?
-                    </a>
+                    </Link>
                 </div>
             </div>
     <div class="mt-10">
