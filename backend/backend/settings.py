@@ -42,13 +42,13 @@ BT_PRIVATE_KEY = env('BT_PRIVATE_KEY', default='')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DEBUG', default=True)
 
 # Configuración importante para Windows
 USE_X_FORWARDED_HOST = True
 SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['*'])
 
 
 # Application definition
@@ -111,14 +111,17 @@ ROOT_URLCONF = 'backend.urls'
 FRONTEND_DIR = BASE_DIR / 'frontend'
 REACT_BUILD_DIR = FRONTEND_DIR / 'build'
 
-STATICFILES_DIRS = [
-    REACT_BUILD_DIR / 'static',
-]
+if os.path.exists(REACT_BUILD_DIR / 'static'):
+    STATICFILES_DIRS = [
+        REACT_BUILD_DIR / 'static',
+    ]
+else:
+    STATICFILES_DIRS = []
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [REACT_BUILD_DIR],  # Utiliza el build de React para servir index.html
+        'DIRS': [REACT_BUILD_DIR] if os.path.exists(REACT_BUILD_DIR) else [],  # Utiliza el build de React para servir index.html si existe
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,33 +142,39 @@ WSGI_APPLICATION = 'backend.wsgi.application'
 
 #***************************************CONFIGURACIÓN DE LAS BASE DE DATOS****************************************/
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'mysql.connector.django',
-        'NAME': env('DB_NAME', default='local'),
-        'USER': env('DB_USER', default='root'), 
-        'PASSWORD': env('DB_PASSWORD', default='12alberto!viejoComeSillas/'),
-        'HOST': env('DB_HOST', default='localhost'),
-        'PORT': env('DB_PORT', default='3306'),
+if env('DATABASE_URL', default=None):
+    import dj_database_url
+    DATABASES = {
+        'default': dj_database_url.config(default=env('DATABASE_URL'))
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'mysql.connector.django',
+            'NAME': env('DB_NAME', default='local'),
+            'USER': env('DB_USER', default='root'), 
+            'PASSWORD': env('DB_PASSWORD', default='12alberto!viejoComeSillas/'),
+            'HOST': env('DB_HOST', default='localhost'),
+            'PORT': env('DB_PORT', default='3306'),
+        }
+    }
 
 DATABASES["default"]["ATOMIC_REQUEST"]=True
 
 #Las dos siguientes son para que no vaya a haber ningun error de cors o csrf
-CORS_ORIGIN_WHITELIST=[ #ACA VA EL URL DEL DOMINIO.COM 
+CORS_ORIGIN_WHITELIST = env.list('CORS_ALLOWED_ORIGINS', default=[
     'http://localhost:3000',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://127.0.0.1:3000',
-]
+])
 
-CSRF_TRUSTED_ORIGINS=[ #ACA VA EL URL DEL DOMINIO.COM 
+CSRF_TRUSTED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
     'http://localhost:3000',
     'http://localhost:8000',
     'http://127.0.0.1:8000',
     'http://127.0.0.1:3000',
-]
+])
 
 #/*******************************************************************************************************************/
 #Acá es una configuración de una forma que nos da django para guardar contraseñas de los usuarios
@@ -220,9 +229,12 @@ STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'backend', 'media')
 MEDIA_URL = '/media/'
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'frontend', 'build', 'static')
-]
+if os.path.exists(os.path.join(BASE_DIR, 'frontend', 'build', 'static')):
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'frontend', 'build', 'static')
+    ]
+else:
+    STATICFILES_DIRS = []
 
 
 #/*************************************************************************************************************/
@@ -320,10 +332,10 @@ CORS_ALLOW_HEADERS = [
     'x-requested-with',
 ]
 
-CORS_ALLOWED_ORIGINS = [
+CORS_ALLOWED_ORIGINS = env.list('CORS_ALLOWED_ORIGINS', default=[
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-]
+])
 CORS_ALLOW_CREDENTIALS = True
 
 
