@@ -10,3 +10,6 @@ python backend/manage.py collectstatic --no-input
 
 echo "Running migrations..."
 python backend/manage.py migrate
+
+echo "Loading initial data..."
+python backend/manage.py loaddata backend/data.json
