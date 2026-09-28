@@ -66,14 +66,14 @@ ECOMMERCE_APPS=['category','product','cart', 'shipping', 'payment', 'orders', 'r
 THIRD_PARTY_APPS=[
     'corsheaders',
     'rest_framework',
-    'djoser',   #Incluye las rutas definidas en el paquete djoser. 
-                #Djoser es una biblioteca de Django que proporciona endpoints para manejar la autenticación de usuarios, como registro, inicio de sesión, recuperación de contraseña, etc.
+    'djoser',
     'social_django',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
     'ckeditor',
     'ckeditor_uploader',
     'anymail',
+    'storages',
 ]
 
 INSTALLED_APPS= DJANGO_APPS + PROJECT_APPS + ECOMMERCE_APPS + THIRD_PARTY_APPS
@@ -229,6 +229,24 @@ STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'backend', 'media')
 MEDIA_URL = '/media/'
+
+# --- NEON OBJECT STORAGE / AWS S3 ---
+AWS_ACCESS_KEY_ID = env('AWS_ACCESS_KEY_ID', default=None)
+if AWS_ACCESS_KEY_ID:
+    AWS_SECRET_ACCESS_KEY = env('AWS_SECRET_ACCESS_KEY')
+    AWS_STORAGE_BUCKET_NAME = env('AWS_STORAGE_BUCKET_NAME', default='media')
+    AWS_S3_ENDPOINT_URL = env('AWS_ENDPOINT_URL_S3')
+    AWS_S3_REGION_NAME = env('AWS_REGION')
+    AWS_S3_SIGNATURE_VERSION = 's3v4'
+    AWS_S3_FILE_OVERWRITE = False
+    
+    # Optional but highly recommended: Path-style is required by Neon
+    AWS_S3_ADDRESSING_STYLE = "path" 
+    
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
+    
+    # Tell CKEditor to also upload directly to the bucket
+    AWS_LOCATION = ''
 
 if os.path.exists(os.path.join(BASE_DIR, 'frontend', 'build', 'static')):
     STATICFILES_DIRS = [
