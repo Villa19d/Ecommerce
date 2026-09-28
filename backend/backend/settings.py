@@ -243,14 +243,7 @@ if AWS_ACCESS_KEY_ID:
     # Optional but highly recommended: Path-style is required by Neon
     AWS_S3_ADDRESSING_STYLE = "path" 
     
-    STORAGES = {
-        "default": {
-            "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
-        },
-        "staticfiles": {
-            "BACKEND": "django.contrib.staticfiles.storage.StaticFilesStorage",
-        },
-    }
+    DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     
     # Tell CKEditor to also upload directly to the bucket
     AWS_LOCATION = ''
@@ -310,6 +303,9 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
     'SOCIAL_AUTH_TOKEN_STRATEGY': 'djoser.social.token.jwt.TokenStrategy',
     'SOCIAL_AUTH_ALLOWED_REDIRECT_URIS': [
+        f"{env('FRONTEND_URL', default='http://localhost:3000')}/login",
+        f"{env('FRONTEND_URL', default='http://localhost:3000')}/signup",
+        env('FRONTEND_URL', default='http://localhost:3000'),
         'http://localhost:3000/login', 
         'http://localhost:3000/signup',
         'http://127.0.0.1:3000/login',
