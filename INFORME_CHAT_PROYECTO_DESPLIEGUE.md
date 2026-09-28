@@ -288,3 +288,30 @@ El sistema actual usa `backend/media`. El almacenamiento local de un Web Service
 La parte de Neon quedó enlazada y validada a nivel de configuración. El proyecto está preparado para usar PostgreSQL externo mediante `DATABASE_URL`, y el backend ya incluye el comando de migraciones en `build.sh`.
 
 El siguiente paso técnico es configurar Render con la URL de Neon, comprobar los logs del build y confirmar que `python backend/manage.py migrate` termina correctamente. Después se debe desplegar el frontend en Vercel y actualizar CORS, OAuth y correo con los dominios reales de producción.
+
+
+## 8. Actualización de Despliegue (Fase Final)
+
+Se han completado los siguientes hitos críticos para poner el sistema en producción real:
+
+### 1. Migración de Correo (SMTP a Resend HTTP)
+Render bloquea los puertos SMTP en su capa gratuita. Se sustituyó la configuración tradicional por `django-anymail[resend]`. Ahora el sistema de correos de Djoser envía emails transaccionales a través de la API HTTPS de Resend, usando el dominio autorizado `ventas@rodrigodvillar.com`.
+
+### 2. Almacenamiento de Imágenes (Neon Object Storage S3)
+Debido a que Render usa discos efímeros (borrando la carpeta `media/` en cada reinicio), se activó **Neon Object Storage** (S3 compatible) en la cuenta del proyecto.
+- Se configuró `django-storages` y `boto3` en `settings.py`.
+- Originalmente se usó `DEFAULT_FILE_STORAGE`, pero debido a que se descubrió que Django 5.2 lo eliminó, se refactorizó al diccionario `STORAGES`.
+- Se migraron los archivos estáticos y fotos locales a la nube con un script en Python que leyó las credenciales de `.env.local`.
+
+### 3. Migración de Datos (MySQL a Neon PostgreSQL)
+El puerto 5432 estaba bloqueado por el ISP local o firewall del usuario, lo que impedía ejecutar `python manage.py loaddata` desde su terminal apuntando a Neon.
+- Se resolvió realizando un `dumpdata` de la base local MySQL a `backend/data.json`.
+- El archivo fue exportado originalmente en formato UTF-16 por PowerShell, causando un error `UnicodeDecodeError` en el build de Render, por lo que se convirtió y subió en **UTF-8**.
+- El escáner de secretos de GitHub bloqueó el volcado por contener tokens OAuth de sesiones locales. El archivo se depuró filtrando los objetos de la tabla `social_django.usersocialauth`.
+- Como Render Free no ofrece Web Shell, se insertó de manera temporal el comando `loaddata` en `build.sh` para que los datos fuesen inyectados directamente en la nube por el pipeline CI/CD.
+
+### 4. Configuración Frontend y OAuth
+- Se ajustó el `SOCIAL_AUTH_ALLOWED_REDIRECT_URIS` en Djoser para no usar dominios *hardcodeados* de localhost, usando `env('FRONTEND_URL')` para permitir redirecciones dinámicas al host de Vercel.
+- (Pendiente del lado del usuario): Agregar las URLs autorizadas en GitHub Developer Apps y Google Cloud Console para que los flujos SSO (Single Sign-On) no lancen errores 400.
+
+**Nota técnica de control de versiones:** Debido a la urgencia y para interactuar dinámicamente con el pipeline CI/CD de Render, los *commits* de configuración recientes se integraron directamente a la rama `main`, desviándose de un *Git Flow* ortodoxo. A partir de este momento, se recomienda crear ramas `feature/` o `hotfix/` para cualquier modificación y solicitar integración mediante Pull Requests hacia `main`.
