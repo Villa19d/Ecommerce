@@ -243,6 +243,9 @@ if AWS_ACCESS_KEY_ID:
     # Optional but highly recommended: Path-style is required by Neon
     AWS_S3_ADDRESSING_STYLE = "path" 
     
+    # Disable presigned URLs since the bucket is public_read
+    AWS_QUERYSTRING_AUTH = False
+    
     STORAGES = {
         "default": {
             "BACKEND": "storages.backends.s3boto3.S3Boto3Storage",
