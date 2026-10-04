@@ -1,3 +1,22 @@
+from django.http import JsonResponse
+from django.core.mail import send_mail
+from django.conf import settings
+
+def test_email(request):
+    try:
+        from_email = settings.DEFAULT_FROM_EMAIL
+        to_email = request.GET.get('to', from_email)
+        send_mail(
+            'Prueba de Correo NitroStore',
+            'Este es un correo de prueba para verificar que Anymail y Resend están funcionando.',
+            from_email,
+            [to_email],
+            fail_silently=False,
+        )
+        return JsonResponse({'status': 'success', 'message': f'Correo enviado a {to_email}'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'error_type': str(type(e)), 'error_message': str(e)})
+
 from django.contrib import admin
 from django.urls import path,include,re_path
 from django.views.generic import TemplateView
@@ -44,6 +63,7 @@ from django.views.static import serve  # Importa esta función
 
 *static() es una función de Django que permite servir archivos estáticos y multimedia durante el desarrollo."""
 urlpatterns = [
+    path('api/test-email/', test_email),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
     path('auth/', include('djoser.social.urls')),
