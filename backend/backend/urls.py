@@ -1,3 +1,13 @@
+from django.contrib.auth import get_user_model
+def check_user(request):
+    from django.http import JsonResponse
+    User = get_user_model()
+    email = request.GET.get('email', '')
+    user = User.objects.filter(email=email).first()
+    if user:
+        return JsonResponse({'status': 'exists', 'email': user.email, 'is_active': user.is_active, 'provider': getattr(user, 'auth_provider', 'unknown')})
+    return JsonResponse({'status': 'not_found', 'email': email})
+
 from django.http import JsonResponse
 from django.core.mail import send_mail
 from django.conf import settings
@@ -63,6 +73,7 @@ from django.views.static import serve  # Importa esta función
 
 *static() es una función de Django que permite servir archivos estáticos y multimedia durante el desarrollo."""
 urlpatterns = [
+    path('api/check-user/', check_user),
     path('api/test-email/', test_email),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.jwt')),
