@@ -342,16 +342,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.UserAccount' #Le decimos a Django que el modelo de usuario que vamos a usar es el que acabamos de crear
 
 # Domain for Djoser emails
-DOMAIN = '127.0.0.1:3000'
+DOMAIN = env('FRONTEND_URL', default='http://localhost:3000').replace('https://', '').replace('http://', '')
 SITE_NAME = 'NitroStore'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER', default='luisrodrigo1005@gmail.com')
-EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
-EMAIL_PORT = env('EMAIL_PORT', default=587)
-EMAIL_USE_TLS = env('EMAIL_USE_TLS', default=True)
+EMAIL_BACKEND = "anymail.backends.resend.EmailBackend"
+ANYMAIL = {
+    "RESEND_API_KEY": env('RESEND_API_KEY', default=''),
+}
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL', default='ventas@rodrigodvillar.com')
 
 
 # Se agrega esta linea en desarrollo para desactivar CSRF, luego se borra en producción
