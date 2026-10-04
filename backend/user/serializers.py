@@ -1,7 +1,7 @@
 from djoser.serializers import UserCreateSerializer, SendEmailResetSerializer
 from rest_framework import serializers
-from django.contrib.auth import get_user_model
-from djoser.conf import settings
+from django.contrib.auth import get_user_model 
+from django.conf import settings
 User = get_user_model()
 
 class CustomSendEmailResetSerializer(SendEmailResetSerializer):
