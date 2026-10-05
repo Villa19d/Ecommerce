@@ -87,12 +87,12 @@ class GetPaymentTotalView(APIView):
                 #Revisar si cupon de precio fijo es valido
                 if FixedPriceCoupon.objects.filter(name__iexact=coupon_name).exists():
                     fixed_price_coupon = FixedPriceCoupon.objects.get(
-                        name=coupon_name
-                    )
-                    discount_amount = float(fixed_price_coupon.discount_price)
-                    if discount_amount < total_amount:
-                        total_amount -= discount_amount
-                        total_after_coupon = total_amount
+                    name=coupon_name
+                )
+                discount_amount = float(fixed_price_coupon.discount_price)
+                if discount_amount < total_amount:
+                    total_amount -= discount_amount
+                    total_after_coupon = total_amount
 
                 elif PercentageCoupon.objects.filter(name__iexact=coupon_name).exists():
                     percentage_coupon = PercentageCoupon.objects.get(
@@ -305,6 +305,7 @@ class ProcessPaymentView(APIView):
                     )
 
             try:
+                from django.conf import settings
                 send_mail(
                     'Your Order Details',
                     'Hey ' + full_name + ','
@@ -312,8 +313,8 @@ class ProcessPaymentView(APIView):
                     + '\n\nGive us some time to process your order and ship it out to you.'
                     + '\n\nYou can go on your user dashboard to check the status of your order.'
                     + '\n\nSincerely,'
-                    + '\nShop Time',
-                    'mail@ninerogues.com',
+                    + '\nNitroStore Team',
+                    settings.DEFAULT_FROM_EMAIL,
                     [user.email],
                     fail_silently=False
                 )
