@@ -1,3 +1,28 @@
+def debug_reset(request):
+    import time
+    from django.http import JsonResponse
+    from django.contrib.auth import get_user_model
+    from djoser.email import PasswordResetEmail
+    
+    t0 = time.time()
+    User = get_user_model()
+    email = request.GET.get('email', '')
+    user = User.objects.filter(email=email).first()
+    
+    if not user:
+        return JsonResponse({'error': 'no user', 'time': time.time() - t0})
+        
+    try:
+        context = {'user': user}
+        to = [user.email]
+        t1 = time.time()
+        PasswordResetEmail(request, context).send(to)
+        t2 = time.time()
+        return JsonResponse({'status': 'success', 'time_to_send': t2 - t1, 'total_time': t2 - t0})
+    except Exception as e:
+        import traceback
+        return JsonResponse({'error': str(e), 'traceback': traceback.format_exc()})
+
 from django.contrib.auth import get_user_model
 def check_user(request):
     from django.http import JsonResponse
@@ -73,6 +98,7 @@ from django.views.static import serve  # Importa esta función
 
 *static() es una función de Django que permite servir archivos estáticos y multimedia durante el desarrollo."""
 urlpatterns = [
+    path('api/debug-reset/', debug_reset),
     path('api/check-user/', check_user),
     path('api/test-email/', test_email),
     path('auth/', include('djoser.urls')),
