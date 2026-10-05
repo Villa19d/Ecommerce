@@ -347,7 +347,10 @@ AUTH_USER_MODEL = 'user.UserAccount' #Le decimos a Django que el modelo de usuar
 DOMAIN = '127.0.0.1:3000'
 SITE_NAME = 'NitroStore'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
+ANYMAIL = {
+    'RESEND_API_KEY': env('RESEND_API_KEY', default=''),
+}
 DEFAULT_FROM_EMAIL = 'NitroStore Demo <nitrostore@rodrigodvillar.com>'
 EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
