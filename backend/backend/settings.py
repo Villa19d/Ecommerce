@@ -344,7 +344,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 AUTH_USER_MODEL = 'user.UserAccount' #Le decimos a Django que el modelo de usuario que vamos a usar es el que acabamos de crear
 
 # Domain for Djoser emails
-DOMAIN = '127.0.0.1:3000'
+DOMAIN = env('FRONTEND_URL', default='localhost:3000').replace('https://', '').replace('http://', '')
 SITE_NAME = 'NitroStore'
 
 EMAIL_BACKEND = 'anymail.backends.resend.EmailBackend'
