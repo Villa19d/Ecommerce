@@ -16,9 +16,9 @@ def debug_reset(request):
         context = {'user': user}
         to = [user.email]
         t1 = time.time()
-        email_obj = PasswordResetEmail(request, context); email_obj.render()
+        PasswordResetEmail(request, context).send(to)
         t2 = time.time()
-        return JsonResponse({'status': 'success', 'total_time': t2 - t0})
+        return JsonResponse({'status': 'success', 'time_to_send': t2 - t1, 'total_time': t2 - t0})
     except Exception as e:
         import traceback
         return JsonResponse({'error': str(e), 'traceback': traceback.format_exc()})

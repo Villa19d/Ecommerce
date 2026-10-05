@@ -348,7 +348,7 @@ DOMAIN = '127.0.0.1:3000'
 SITE_NAME = 'NitroStore'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-DEFAULT_FROM_EMAIL = env('EMAIL_HOST_USER', default='luisrodrigo1005@gmail.com')
+DEFAULT_FROM_EMAIL = 'NitroStore Demo <nitrostore@rodrigodvillar.com>'
 EMAIL_HOST = env('EMAIL_HOST', default='smtp.gmail.com')
 EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD', default='')
