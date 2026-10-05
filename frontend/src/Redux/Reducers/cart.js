@@ -38,7 +38,8 @@ export default function Cart(state = initialState, action) {
         case ADD_ITEM_SUCCESS:
             return {
                 ...state,
-                items: payload.cart
+                items: payload.cart,
+                total_items: payload.cart.length
             };
         case ADD_ITEM_FAIL:
             return {
@@ -117,7 +118,8 @@ export default function Cart(state = initialState, action) {
         case REMOVE_ITEM_SUCCESS:
             return {
                 ...state,
-                items: payload.cart
+                items: payload.cart,
+                total_items: payload.cart.length
             };
         case REMOVE_ITEM_FAIL:
             return {

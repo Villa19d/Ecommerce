@@ -138,7 +138,7 @@ class GetItemTotalView(APIView):
 
         try:
             cart = Cart.objects.get(user=user)
-            total_items = cart.total_items
+            total_items = CartItem.objects.filter(cart=cart).count()
 
             return Response(
                 {'total_items': total_items},
