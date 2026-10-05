@@ -9,10 +9,8 @@ class ExceptionLoggingMiddleware:
         return self.get_response(request)
 
     def process_exception(self, request, exception):
-        response = JsonResponse({
+        return JsonResponse({
             'error': str(type(exception)),
             'message': str(exception),
             'traceback': traceback.format_exc()
         }, status=500)
-        response['Access-Control-Allow-Origin'] = '*'
-        return response
