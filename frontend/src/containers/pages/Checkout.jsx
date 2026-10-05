@@ -257,16 +257,16 @@ const Checkout = ({
 
     return (
         <Layout>
-            <div className="bg-white dark:bg-slate-900 transition-colors duration-300">
+            <div className="bg-transparent transition-colors duration-300 min-h-screen">
       <div className="max-w-2xl mx-auto pt-16 pb-24 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
         <h1 className="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-white sm:text-4xl">Checkout</h1>
         <div className="mt-12 lg:grid lg:grid-cols-12 lg:gap-x-12 lg:items-start xl:gap-x-16">
-          <section aria-labelledby="cart-heading" className="lg:col-span-7">
-            <h2 id="cart-heading" className="sr-only">
-              Items in your shopping cart
+          <section aria-labelledby="cart-heading" className="lg:col-span-7 bg-white dark:bg-slate-800 rounded-lg shadow-sm border border-gray-200 dark:border-slate-700 px-4 py-6 sm:p-6 lg:p-8 mb-6 lg:mb-0">
+            <h2 id="cart-heading" className="text-lg font-medium text-gray-900 dark:text-white mb-6">
+              Tus artículos
             </h2>
 
-            <ul className="border-t border-b border-gray-200 dark:border-slate-700 divide-y divide-gray-200 dark:divide-slate-700">
+            <ul className="divide-y divide-gray-200 dark:divide-slate-700">
               {showItems()}
             </ul>
           </section>
