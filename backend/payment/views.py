@@ -87,12 +87,12 @@ class GetPaymentTotalView(APIView):
                 #Revisar si cupon de precio fijo es valido
                 if FixedPriceCoupon.objects.filter(name__iexact=coupon_name).exists():
                     fixed_price_coupon = FixedPriceCoupon.objects.get(
-                    name=coupon_name
-                )
-                discount_amount = float(fixed_price_coupon.discount_price)
-                if discount_amount < total_amount:
-                    total_amount -= discount_amount
-                    total_after_coupon = total_amount
+                        name=coupon_name
+                    )
+                    discount_amount = float(fixed_price_coupon.discount_price)
+                    if discount_amount < total_amount:
+                        total_amount -= discount_amount
+                        total_after_coupon = total_amount
 
                 elif PercentageCoupon.objects.filter(name__iexact=coupon_name).exists():
                     percentage_coupon = PercentageCoupon.objects.get(
