@@ -154,7 +154,7 @@ const ShippingForm = ({
                         <input
                             type='text'
                             name='full_name'
-                            placeholder={`${user.first_name} ${user.last_name}`}
+                            placeholder={`${user?.first_name || ''} ${user?.last_name || ''}`}
                             onChange={e => onChange(e)}
                             value={full_name}
                             required
