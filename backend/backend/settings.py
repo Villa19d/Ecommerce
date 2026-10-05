@@ -42,7 +42,7 @@ BT_PRIVATE_KEY = env('BT_PRIVATE_KEY', default='')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = True
 
 # Configuración importante para Windows
 USE_X_FORWARDED_HOST = True
@@ -90,6 +90,7 @@ CKEDITOR_UPLOAD_PATH = "/media/"
 MIDDLEWARE = [
     'social_django.middleware.SocialAuthExceptionMiddleware',
     'corsheaders.middleware.CorsMiddleware',
+    'backend.middleware.ExceptionLoggingMiddleware',
 
     
     'django.middleware.security.SecurityMiddleware',
