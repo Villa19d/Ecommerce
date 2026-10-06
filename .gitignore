@@ -21,3 +21,6 @@ frontend/build/
 .neon
 .env.local
 node_modules/
+
+AI_CONTEXT_DOCUMENTATION.md
+INFORME_CHAT_PROYECTO_DESPLIEGUE.md
