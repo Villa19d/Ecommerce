@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="nitroGrad" x1="2" y1="2" x2="62" y2="62" gradientUnits="userSpaceOnUse">
+      <stop stopColor="#3B82F6" />
+      <stop offset="1" stopColor="#8B5CF6" />
+    </linearGradient>
+  </defs>
+
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#nitroGrad)" />
+  <path d="M20 22H24L27 40H43L46 26H28" stroke="#ffffff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="30" cy="46" r="2.5" fill="#ffffff" />
+  <circle cx="40" cy="46" r="2.5" fill="#ffffff" />
+  <path d="M37 20L31 29H38L33 36" stroke="#F59E0B" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+</svg>
